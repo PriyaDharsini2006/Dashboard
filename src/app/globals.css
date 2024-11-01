@@ -6,6 +6,14 @@
   --background: #ffffff;
   --foreground: #171717;
 }
+.h1-flicker {
+  font-size: 8rem; /* Adjust as necessary */
+  font-weight: 700;
+  text-transform: uppercase;
+  color: white; /* Main text color */
+  overflow: hidden; /* Hide any overflow */
+  white-space: nowrap; /* Prevent line breaks */
+}
 
 @media (prefers-color-scheme: dark) {
   :root {
