@@ -33,7 +33,7 @@ const Hyperplexed = ({ onAnimationEnd = () => {} }) => {
         }, 1000);
       }
 
-      iteration += 1 / 4;
+      iteration += 1 ;
     }, 80);
 
     return () => clearInterval(interval);
@@ -45,7 +45,7 @@ const Hyperplexed = ({ onAnimationEnd = () => {} }) => {
         backgroundVisible ? 'opacity-100' : 'opacity-0'
       }`}
       style={{
-        backgroundImage: `url('/Loading.jpg')`,
+        // backgroundImage: `url('/Loading.jpg')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
