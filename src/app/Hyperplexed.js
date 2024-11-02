@@ -96,6 +96,7 @@
 // };
 
 // export default Hyperplexed;
+
 // 'use client';
 // import { useEffect, useRef, useState } from 'react';
 
@@ -147,11 +148,15 @@
 //         backgroundPosition: 'center',
 //       }}
 //     >
-//       <div className="hackerzContainer flex flex-col items-center justify-center">
+//       <div className="flex flex-col items-center justify-center h-full transition-opacity duration-1000">
+//         {/* Hackerz Container with Image */}
+//         <div className=''>
 //           <img src="/hackerz.webp" alt="logo" loading="lazy" className="hackerz-logo" />
+//           </div>
+//           <div className="glitch-wrapper">
+//           <div className="glitch text-2xl" data-text="HACKERZ">HACKERZ</div>
 //         </div>
 
-//       <div className="flex flex-col items-center justify-center h-full w-full transition-opacity duration-1000">
 //         <h1
 //           ref={h1Ref}
 //           className={`font-mono text-gradient p-4 md:p-6 lg:p-8 xl:p-12 rounded-lg shadow-lg transition-transform duration-1000 ${
@@ -162,17 +167,14 @@
 //             textAlign: 'center',
 //             WebkitBackgroundClip: 'text',
 //             color: 'transparent',
+//             margin: '20px 0', // Add margin to separate from logo
 //           }}
 //         >
 //           {originalText}
 //         </h1>
 
-//         {/* Hackerz Container with Image and Glitch Text */}
-//         <div className="hackerzContainer">
-//           <div className="glitch-wrapper">
-//             <div className="glitch" data-text="HACKERZ">HACKERZ</div>
-//           </div>
-//         </div>
+//         {/* Glitch Text */}
+        
 
 //         <style jsx>{`
 //           .text-gradient {
@@ -205,20 +207,21 @@
 //             flex-direction: column;
 //             align-items: center;
 //             justify-content: center;
-//             margin-top: 20px; /* Adjust as needed */
+//             margin-bottom: 20px; /* Adjust as needed */
 //           }
 
 //           .hackerz-logo {
-//             width: 150px; /* Adjust size as needed */
+//             width: 300px; /* Increased size for logo */
 //             height: auto;
-//             margin-bottom: 10px; /* Spacing between the logo and text */
+//             margin-bottom: 20px; /* Spacing between the logo and main text */
 //           }
 
 //           .glitch-wrapper {
 //             position: relative;
-//             font-size: 3rem; /* Adjust font size as needed */
+//             font-size: 6rem; /* Increased font size for glitch text */
 //             color: #00d4ff; /* Glitch text color */
 //             overflow: hidden;
+//             margin-top: 20px; /* Adjust spacing as needed */
 //           }
 
 //           .glitch {
@@ -300,8 +303,11 @@ const Hyperplexed = ({ onAnimationEnd = () => {} }) => {
     >
       <div className="flex flex-col items-center justify-center h-full transition-opacity duration-1000">
         {/* Hackerz Container with Image */}
-        <div className="hackerzContainer">
+        <div className='hackerzContainer'>
           <img src="/hackerz.webp" alt="logo" loading="lazy" className="hackerz-logo" />
+        </div>
+        <div className="glitch-wrapper">
+          <div className="glitch text-2xl" data-text="HACKERZ">HACKERZ</div>
         </div>
 
         <h1
@@ -321,10 +327,7 @@ const Hyperplexed = ({ onAnimationEnd = () => {} }) => {
         </h1>
 
         {/* Glitch Text */}
-        <div className="glitch-wrapper">
-          <div className="glitch" data-text="HACKERZ">HACKERZ</div>
-        </div>
-
+        
         <style jsx>{`
           .text-gradient {
             background: linear-gradient(90deg, rgba(218,218,218,1) 0%, rgba(61,61,61,1) 100%, rgba(0,212,255,1) 100%);
@@ -360,7 +363,7 @@ const Hyperplexed = ({ onAnimationEnd = () => {} }) => {
           }
 
           .hackerz-logo {
-            width: 300px; /* Increased size for logo */
+            width: 500px; /* Increased size for logo */
             height: auto;
             margin-bottom: 20px; /* Spacing between the logo and main text */
           }
