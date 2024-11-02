@@ -1,4 +1,3 @@
-'use client';
 import { useEffect, useRef, useState } from 'react';
 
 const Hyperplexed = ({ onAnimationEnd = () => {} }) => {
@@ -50,34 +49,40 @@ const Hyperplexed = ({ onAnimationEnd = () => {} }) => {
       }}
     >
       <div className="flex flex-col items-center justify-center h-full transition-opacity duration-1000">
-        {/* Hackerz Container with Image */}
-        <div className='hackerzContainer glitch-wrapper glitch'>
+        <div className="hackerzContainer glitch-wrapper glitch">
           <img src="/NewHackerzWhite.png" alt="logo" loading="lazy" className="hackerz-logo" />
         </div>
 
         <h1
           ref={h1Ref}
-          className={`font-mono text-gradient p-4 md:p-6 lg:p-8 xl:p-12 rounded-lg shadow-lg transition-transform duration-1000 ${
+          className={`font-redhat text-gradient p-4 md:p-6 lg:p-8 xl:p-12 rounded-lg transition-transform duration-1000 ${
             isAnimating ? '' : 'animate-zoomOut'
           }`}
           style={{
-            fontSize: 'clamp(2rem, 6vw, 8rem)',
+            fontSize: 'clamp(1rem, 4vw, 6rem)',
             textAlign: 'center',
             WebkitBackgroundClip: 'text',
             color: 'transparent',
-            margin: '20px 0', // Add margin to separate from logo
+            top: '-20px',
+            margin: '20px 0',
+            position: 'relative',
+            fontFamily: "'Red Hat Display', sans-serif",
           }}
         >
           {originalText}
         </h1>
 
         <style jsx>{`
+          @import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;700&display=swap');
+
           .text-gradient {
-            background: linear-gradient(90deg, rgba(218,218,218,1) 0%, rgba(61,61,61,1) 100%, rgba(0,212,255,1) 100%);
+            background: white;
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            font-family: 'Red Hat Display', sans-serif;
           }
+
           @keyframes zoomOut {
             0% {
               opacity: 1;
@@ -102,40 +107,38 @@ const Hyperplexed = ({ onAnimationEnd = () => {} }) => {
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            margin-bottom: 20px; /* Adjust as needed */
+            margin-bottom: 20px;
           }
 
           .hackerz-logo {
-            width: 800px; /* Increased size for logo */
+            width: 800px;
             height: auto;
-            margin-bottom: 20px; /* Spacing between the logo and main text */
+            margin-bottom: 20px;
           }
 
           .glitch-wrapper {
             position: relative;
-            font-size: 6rem; /* Increased font size for glitch text */
-            color: #00d4ff; /* Glitch text color */
             overflow: hidden;
-            margin-top: 20px; /* Adjust spacing as needed */
+            margin-top: 20px;
           }
 
           .glitch {
             position: relative;
-            color: #fff; /* Glitch text color */
+            color: #fff;
             text-shadow: 
-              1px 0 #ff3d00, 
-              -1px 0 #ff3d00, 
-              0 1px #00ff0e, 
-              0 -1px #00ff0e; /* Glitch effect shadows */
-            animation: glitch-animation 1.5s infinite;
+              2px 0 #ff3d00, 
+              -2px 0 #ff3d00, 
+              0 2px #00ff0e, 
+              0 -2px #00ff0e;
+            animation: glitch-animation 1s infinite;
           }
 
           @keyframes glitch-animation {
-            0% { transform: translate(2px, 0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 0); }
-            80% { transform: translate(0, 2px); }
+            0% { transform: translate(3px, 0); }
+            20% { transform: translate(-3px, 3px); }
+            40% { transform: translate(-2px, -3px); }
+            60% { transform: translate(3px, 0); }
+            80% { transform: translate(0, 3px); }
             100% { transform: translate(0, 0); }
           }
         `}</style>

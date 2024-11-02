@@ -1,27 +1,26 @@
 'use client'
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Hyperplexed from "./Hyperplexed";
+import Navbar from './Navbar';
 
 const Page = () => {
   const [showContent, setShowContent] = useState(false);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowContent(true);
-    }, 4000);
-
-    return () => clearTimeout(timer); 
-  }, []);
+  const handleAnimationEnd = () => {
+    setShowContent(true);
+  };
 
   return (
-    <div>
-      <Hyperplexed />
-      {/* {showContent && (
-        <div className="content">
-          <h2>Welcome to the Main Content!</h2>
-          <p>This content appears after the cinematic intro finishes.</p>
-        </div>
-      )} */}
+    <div className="min-h-screen bg-black">
+      <Hyperplexed onAnimationEnd={handleAnimationEnd} />
+      <div 
+        className={`transition-opacity duration-1000 
+          ${showContent ? 'opacity-100' : 'opacity-0'}`}
+      >
+        <Navbar/>
+        <h1 className='text-white text-center font-redhat text-3xl'>
+        </h1>
+      </div>
     </div>
   );
 };
