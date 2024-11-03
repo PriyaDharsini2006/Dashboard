@@ -18,7 +18,7 @@ const Page = () => {
           ${showContent ? 'opacity-100' : 'opacity-0'}`}
       >
         <Navbar/>
-        <h1 className='text-white text-center font-redhat text-3xl'>
+        <h1 className='text-white text-center font-redhat text-4xl'>
         </h1>
       </div>
     </div>

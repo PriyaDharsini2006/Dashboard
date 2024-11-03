@@ -33,7 +33,7 @@ const Hyperplexed = ({ onAnimationEnd = () => {} }) => {
       }
 
       iteration += 1;
-    }, 80);
+    }, 100);
 
     return () => clearInterval(interval);
   }, [onAnimationEnd]);
