@@ -85,3 +85,10 @@ button {
   border: 2px solid #00ff00; /* Change border color to green on hover */
   box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00; /* Glow effect */
 }
+@font-face {
+  font-family: 'HACKED Regular';
+  src: url('/path/to/hacked-regular.ttf') format('truetype'); /* Adjust the path accordingly */
+  font-weight: normal;
+  font-style: normal;
+}
+
