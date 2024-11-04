@@ -1,145 +1,36 @@
-// 'use client'
-// import React, { useState, useEffect } from 'react';
-// import { ChevronDown, Menu } from 'lucide-react';
-
-// const Navbar = () => {
-//   const [isOpen, setIsOpen] = useState(false);
-//   const [timeLeft, setTimeLeft] = useState(null);
-
-//   const navLinks = [
-//     { name: 'External OD', href: '#' },
-//     { name: 'Internal OD', href: '#' },
-//     { name: 'Workspace', href: '#' },
-//     { name: 'Tasks', href: '/task' },
-//     { name: 'PR Mail', href: '#' },
-//     { name: 'Treasury', href: '#' },
-//     { name: 'Database', href: '#' },
-//   ];
-
-//   function calculateTimeLeft() {
-//     const targetDate = new Date();
-//     targetDate.setMonth(targetDate.getMonth() + 1);
-//     const difference = targetDate - new Date();
-
-//     return {
-//       days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-//       hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-//       minutes: Math.floor((difference / 1000 / 60) % 60),
-//       seconds: Math.floor((difference / 1000) % 60),
-//     };
-//   }
-
-//   useEffect(() => {
-//     setTimeLeft(calculateTimeLeft());
-
-//     const timer = setInterval(() => {
-//       setTimeLeft(calculateTimeLeft());
-//     }, 1000);
-
-//     return () => clearInterval(timer);
-//   }, []);
-
-//   return (
-//     <nav className="bg-black text-white shadow-lg fixed w-full top-0 z-50 py-5">
-//       <div className="max-w-7xl mx-auto ">
-//         <div className="flex items-center justify-between h-20">
-//           <div className="flex items-center space-x-6">
-//             <div className="flex-shrink-0">
-//               <img
-//                 className="h-[200px] w-[200px]" 
-//                 src="/CIT_Logo.png"
-//                 alt="Logo"
-//               />
-//             </div>
-
-//             <div className="lg:hidden flex items-center">
-//               {timeLeft && (
-//                 <div className="text-xl font-redhat">
-//                   <span className="font-bold">{timeLeft.days}d </span>
-//                   <span className="font-bold">{timeLeft.hours}h </span>
-//                   <span className="font-bold">{timeLeft.minutes}m </span>
-//                   <span className="font-bold">{timeLeft.seconds}s</span>
-//                 </div>
-//               )}
-//             </div>
-//           </div>
-
-//           <div className="hidden lg:flex items-center justify-center flex-1 space-x-10">
-//             {navLinks.map((link) => (
-//               <a
-//                 key={link.name}
-//                 href={link.href}
-//                 className="font-redhat text-xl text-white hover:text-gray-300 transition-colors duration-200"
-//               >
-//                 {link.name}
-//               </a>
-//             ))}
-//           </div>
-
-//           <div className="hidden lg:flex items-center space-x-4 font-redhat">
-//             {timeLeft && (
-//               <div className="text-lg">
-//                 <span className="font-['red hat display']">{timeLeft.days}d </span>
-//                 <span className="font-['red hat display']">{timeLeft.hours}h </span>
-//                 <span className="font-['red hat display']">{timeLeft.minutes}m </span>
-//                 <span className="font-['red hat display']">{timeLeft.seconds}s</span>
-//               </div>
-//             )}
-//           </div>
-
-//           <div className="lg:hidden flex items-center">
-//             <button
-//               onClick={() => setIsOpen(!isOpen)}
-//               className="inline-flex items-center justify-center p-3 rounded-md text-white hover:text-gray-300 focus:outline-none"
-//               aria-expanded={isOpen}
-//             >
-//               <Menu size={28} /> 
-//             </button>
-//           </div>
-//         </div>
-//       </div>
-
-//       {/* Mobile Navigation Dropdown */}
-//       <div
-//         className={`${isOpen ? 'block' : 'hidden'} lg:hidden`}
-//         aria-hidden={!isOpen}
-//       >
-//         <div className="px-4 pt-3 pb-4 space-y-2">
-//           {navLinks.map((link) => (
-//             <a
-//               key={link.name}
-//               href={link.href}
-//               className="block px-4 py-3 rounded-md text-lg text-white font-redhat hover:bg-gray-700 transition-colors duration-200"
-//             >
-//               {link.name}
-//             </a>
-//           ))}
-//         </div>
-//       </div>
-//     </nav>
-//   );
-// };
-
-// export default Navbar;
-'use client'
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation'; // For Next.js 13+ app directory
-import { ChevronDown, Menu } from 'lucide-react';
-
+import { useRouter } from 'next/navigation';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faClipboardList, 
+  faCog, 
+  faDatabase, 
+  faArrowUpRightFromSquare, 
+  faListCheck, 
+  faCheckCircle,
+  faHome,// Replace with a valid icon if needed
+} from '@fortawesome/free-solid-svg-icons';
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Authentication state
-  const router = useRouter(); // Use next/navigation's useRouter in Next.js 13+ app directory
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const router = useRouter();
 
   const navLinks = [
-    { name: 'External OD', href: '#' },
-    { name: 'Internal OD', href: '#' },
-    { name: 'Workspace', href: '#' },
-    { name: 'Tasks', href: '/task' }, // Link to Task page
-    { name: 'PR Mail', href: '#' },
-    { name: 'Treasury', href: '#' },
-    { name: 'Database', href: '#' },
+    { name: 'External OD', href: '#', icon: faArrowUpRightFromSquare },
+    { name: 'Internal OD', href: '#', icon: faClipboardList },
+    { name: 'Workspace', href: '#', icon: faCog },
+    { name: 'Database', href: '#', icon: faDatabase },
+  ];
+
+  const nav = [
+    { name: 'Tasks', href: '/task', icon: faListCheck },
+    { name: 'PR Mail', href: '#', icon: faCheckCircle }, // Use a valid icon here
+    { name: 'Treasury', href: '#', icon: faHome }, // Use a valid icon here
   ];
 
   function calculateTimeLeft() {
@@ -167,92 +58,84 @@ const Navbar = () => {
 
   const handleNavigation = (link) => {
     if (link.name === 'Tasks' && !isAuthenticated) {
-      // Redirect to login if not authenticated and trying to access Tasks
       router.push('/login');
     } else {
-      // Navigate to the selected link's href
       router.push(link.href);
     }
   };
 
   return (
-    <nav className="bg-black text-white shadow-lg fixed w-full top-0 z-50 py-5">
-      <div className="max-w-7xl mx-auto ">
-        <div className="flex items-center justify-between h-20">
-          <div className="flex items-center space-x-6">
-            <div className="flex-shrink-0">
-              <img
-                className="h-[200px] w-[200px]" 
-                src="/CIT_Logo.png"
-                alt="Logo"
-              />
-            </div>
+    <div className="flex flex-col items-center text-center p-10">
+      <div className="text-6xl font-bold mb-8">DASHBOARD</div>
 
-            <div className="lg:hidden flex items-center">
-              {timeLeft && (
-                <div className="text-xl font-redhat">
-                  <span className="font-bold">{timeLeft.days}d </span>
-                  <span className="font-bold">{timeLeft.hours}h </span>
-                  <span className="font-bold">{timeLeft.minutes}m </span>
-                  <span className="font-bold">{timeLeft.seconds}s</span>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="hidden lg:flex items-center justify-center flex-1 space-x-10">
-            {navLinks.map((link) => (
-              <button
-                key={link.name}
-                onClick={() => handleNavigation(link)}
-                className="font-redhat text-xl text-white hover:text-gray-300 transition-colors duration-200"
-              >
-                {link.name}
-              </button>
-            ))}
-          </div>
-
-          <div className="hidden lg:flex items-center space-x-4 font-redhat">
-            {timeLeft && (
-              <div className="text-lg">
-                <span className="font-['red hat display']">{timeLeft.days}d </span>
-                <span className="font-['red hat display']">{timeLeft.hours}h </span>
-                <span className="font-['red hat display']">{timeLeft.minutes}m </span>
-                <span className="font-['red hat display']">{timeLeft.seconds}s</span>
-              </div>
-            )}
-          </div>
-
-          <div className="lg:hidden flex items-center">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-3 rounded-md text-white hover:text-gray-300 focus:outline-none"
-              aria-expanded={isOpen}
-            >
-              <Menu size={28} /> 
-            </button>
-          </div>
+      {/* Countdown Timer */}
+      <div className="flex flex-col items-center mb-6">
+        <div className="flex flex-row p-4">
+          <h1 className="glitch text-5xl font-bold text-teal-400 mr-1">Count</h1>
+          <h1 className="glitch text-5xl font-bold text-red-300">Down</h1>
+          
         </div>
-      </div>
 
-      {/* Mobile Navigation Dropdown */}
-      <div
-        className={`${isOpen ? 'block' : 'hidden'} lg:hidden`}
-        aria-hidden={!isOpen}
-      >
-        <div className="px-4 pt-3 pb-4 space-y-2">
-          {navLinks.map((link) => (
-            <button
-              key={link.name}
-              onClick={() => handleNavigation(link)}
-              className="block px-4 py-3 rounded-md text-lg text-white font-redhat hover:bg-gray-700 transition-colors duration-200"
-            >
-              {link.name}
-            </button>
+        <div className="flex space-x-4 mt-4">
+          {['days', 'hours', 'minutes', 'seconds'].map((unit) => (
+            <div key={unit} className="relative w-40 h-28 px-2 perspective">
+              <div className="flip-card-inner">
+                <div className="flip-card-front bg-gray-800 text-teal-300 text-3xl font-bold flex justify-center items-center rounded-md">
+                  <span>{timeLeft[unit]}</span>
+                </div>
+                <div className="flip-card-back bg-gray-900 text-teal-300 text-3xl font-bold flex justify-center items-center rounded-md rotate-y-180">
+                  <span>{unit.charAt(0).toUpperCase() + unit.slice(1)} Left</span>
+                </div>
+              </div>
+              <span className="text-white text-sm font-medium uppercase">{unit}</span>
+            </div>
           ))}
         </div>
       </div>
-    </nav>
+
+      <div className="flex w-full justify-center lg:justify-between">
+        <div className="text-xl pt-12 font-redhat relative">
+          <div className="font-semibold mb-2"></div>
+          <div className="font-semibold text-center mb-2"></div>
+          <div className='flex flex-1 space-x-80'>
+            <div className="flex flex-col item-center justify-center space-y-24">
+              {navLinks.map((link) => (
+                <div key={link.name} className="relative w-full ">
+                  <button
+                    onClick={() => handleNavigation(link)}
+                    className="button w-full text-xl text-white bg-gray-800 transition-colors duration-200 rounded-md px-28 py-24 transform hover:scale-105 active:scale-95 focus:outline-none focus:ring focus:ring-teal-400 flex items-center"
+        >
+                    <FontAwesomeIcon icon={link.icon} className="mr-2 size-11" />
+                    {link.name}
+                  </button>
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-col  space-y-24">
+              {nav.map((link) => (
+                <div key={link.name} className="relative w-full">
+                  <button
+                    onClick={() => handleNavigation(link)}
+                    className="button w-full text-xl text-white bg-gray-800 transition-colors duration-200 rounded-md px-28 py-24 transform hover:scale-105 active:scale-95 focus:outline-none focus:ring focus:ring-teal-400 flex items-center"
+       >
+                    <FontAwesomeIcon icon={link.icon} className="mr-2 size-11" />
+                    {link.name}
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="text-xl font-redhat ">
+          <div className='flex flex-row justify-center space-x-96'>
+            <div className="font-semibold mb-2">Reference</div>
+            <div></div>
+          </div>
+          <p className="text-white">Add reference content here.</p>
+        </div>
+      </div>
+    </div>
   );
 };
 
