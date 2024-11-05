@@ -1,4 +1,5 @@
 import localFont from "next/font/local";
+import { SessionWrapper } from './SessionWrapper';
 import "./globals.css";
 
 const geistSans = localFont({
@@ -21,7 +22,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        {children}
+      <SessionWrapper>
+          {children}
+        </SessionWrapper>
       </body>
     </html>
   );
