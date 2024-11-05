@@ -58,7 +58,7 @@ const Navbar = () => {
 
   const handleNavigation = (link) => {
     if (link.name === 'Tasks' && !isAuthenticated) {
-      router.push('/login');
+      router.push('/sign');
     } else {
       router.push(link.href);
     }
