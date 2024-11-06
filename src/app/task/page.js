@@ -1,5 +1,5 @@
 export default function task(){
-    return (
-        <div>welcome to task page</div>
-    )
+  return(
+    <div>task</div>
+  )
 }

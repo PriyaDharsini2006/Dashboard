@@ -30,3 +30,26 @@ model AdminRequest {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+model Task {
+  id             String    @id @default(cuid())
+  title          String
+  description    String?
+  dueDate        DateTime?
+  completed      Boolean   @default(false)
+  folderId       String
+  folderRelation Folder    @relation(name: "TaskFolder", fields: [folderId], references: [id])
+}
+
+model Folder {
+  id            String @id @default(cuid())
+  name          String
+  groupId       String
+  groupRelation Group  @relation(name: "FolderGroup", fields: [groupId], references: [id])
+  tasks         Task[] @relation(name: "TaskFolder")
+}
+
+model Group {
+  id      String   @id @default(cuid())
+  name    String
+  folders Folder[] @relation(name: "FolderGroup")
+}
