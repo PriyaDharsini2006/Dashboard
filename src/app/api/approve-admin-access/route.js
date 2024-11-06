@@ -1,4 +1,3 @@
-// app/api/process-approved-requests/route.ts
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 
@@ -6,35 +5,47 @@ const prisma = new PrismaClient();
 
 export async function POST() {
   try {
-    // Fetch all approved requests from the AdminRequest table
-    const approvedRequests = await prisma.adminRequest.findMany({
-      where: { approved: true },
-    });
-
-    if (approvedRequests.length === 0) {
-      return NextResponse.json({ message: 'No approved requests found' });
-    }
-
-    // Loop over each approved request
-    for (const request of approvedRequests) {
-      // Add the approved request to the Admin table
-      await prisma.admin.create({
-        data: {
-          email: request.email,
-          name: request.name,
-        },
+    // Start a transaction to ensure data consistency
+    const result = await prisma.$transaction(async (tx) => {
+      // Fetch all approved requests from the AdminRequest table
+      const approvedRequests = await tx.AdminRequest.findMany({
+        where: { approved: true },
       });
 
-      // Delete the request from AdminRequest table after adding to Admin
-    //   await prisma.adminRequest.delete({
-    //     where: { id: request.id },
-    //   });
-    }
+      if (approvedRequests.length === 0) {
+        return {
+          message: 'No approved requests found',
+          count: 0,
+        };
+      }
 
-    return NextResponse.json({
-      message: 'Approved requests processed successfully',
-      count: approvedRequests.length,
+      // Create array to store all operations
+      const operations = approvedRequests.map(async (request) => {
+        // Add to Admin table
+        await tx.Admin.create({
+          data: {
+            email: request.email,
+            name: request.name,
+          },
+        });
+
+        // Delete from AdminRequest table
+        await tx.AdminRequest.delete({
+          where: { id: request.id },
+        });
+      });
+
+      // Execute all operations
+      await Promise.all(operations);
+
+      return {
+        message: 'Approved requests processed successfully',
+        count: approvedRequests.length,
+      };
     });
+
+    return NextResponse.json(result);
+
   } catch (error) {
     console.error('Error processing approved requests:', error);
     return NextResponse.json(
@@ -42,6 +53,6 @@ export async function POST() {
       { status: 500 }
     );
   } finally {
-    await prisma.$disconnect(); // Ensure the database connection is closed
+    await prisma.$disconnect();
   }
 }
