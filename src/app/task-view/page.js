@@ -79,7 +79,8 @@ export default function TaskView() {
     <>
       {!isRequestPageVisible ? ( // Show the request button if the request page is not visible
         <div className="fixed top-4 right-4 bg-green-500 text-white p-4 w-48 rounded-lg shadow-lg cursor-pointer animate-bounce" title="Request Admin Access" onClick={handleRequestOpen}>
-          <p className="text-center font-semibold">Request Admin Access</p>
+          {/* <p className="text-center font-semibold">Request Admin Access</p> */}
+          <p className="text-center font-semibold">ADMIN PORTAL</p>
         </div>
       ) : (
         <AdminRequestPage onClose={handleClose} onSuccess={handleRedirect} /> // Render Admin Request Page
