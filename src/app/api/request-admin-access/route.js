@@ -12,9 +12,7 @@ export async function POST() {
     });
 
     // If there are no approved requests, respond accordingly
-    if (approvedRequests.length === 0) {
-      return NextResponse.json({ message: 'No approved requests found' }, { status: 404 });
-    }
+    
 
     // Loop over each approved request
     for (const request of approvedRequests) {
