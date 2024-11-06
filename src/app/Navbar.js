@@ -230,7 +230,7 @@ const Navbar = () => {
 
   const handleNavigation = (link) => {
     if (link.name === 'Tasks' && !isAuthenticated) {
-      router.push('/sign');
+      router.push('/task-view');
     } else {
       router.push(link.href);
     }

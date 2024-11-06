@@ -61,7 +61,8 @@ export default function TaskView() {
 
   const handleRequestOpen = () => {
     setRequestPageVisible(true); // Open the request page
-    setShowMainContent(false); // Hide the main content
+    setShowMainContent(false);
+    router.push('/sign'); // Hide the main content
   };
 
   const handleClose = () => {

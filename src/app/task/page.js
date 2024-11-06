@@ -199,23 +199,7 @@ const TaskManager = () => {
               {group.name}
             </div>
           ))}
-          {/* {groups.map(group => (
-  <div
-    key={group.id}
-    className={`p-3 cursor-pointer hover:bg-gray-100 ${
-      selectedGroup?.id === group.id ? 'bg-gray-200' : ''
-    }`}
-    onClick={() => setSelectedGroup(group)}
-  >
-    {group.name}
-    <button onClick={() => handleDeleteGroup(group.id)} className="text-red-500 ml-2">
-      <Trash2 className="h-4 w-4" />
-    </button>
-    <button onClick={() => handleUpdateGroup(group.id, 'New Group Name')} className="text-blue-500 ml-2">
-      Edit
-    </button>
-  </div>
-))} */}
+         
 
         </div>
       </div>
@@ -242,23 +226,7 @@ const TaskManager = () => {
                   {folder.name}
                 </div>
               ))}
-              {/* {selectedGroup.folders?.map(folder => (
-  <div
-    key={folder.id}
-    className={`p-4 bg-white rounded-lg shadow cursor-pointer ${
-      selectedFolder?.id === folder.id ? 'ring-2 ring-blue-500' : ''
-    }`}
-    onClick={() => setSelectedFolder(folder)}
-  >
-    {folder.name}
-    <button onClick={() => handleDeleteFolder(folder.id)} className="text-red-500 ml-2">
-      <Trash2 className="h-4 w-4" />
-    </button>
-    <button onClick={() => handleUpdateFolder(folder.id, 'New Folder Name')} className="text-blue-500 ml-2">
-      Edit
-    </button>
-  </div>
-))} */}
+              
 
             </div>
           </div>
@@ -294,30 +262,7 @@ const TaskManager = () => {
                   </button>
                 </div>
               ))}
-              {/* {selectedFolder.tasks?.map(task => (
-  <div
-    key={task.id}
-    className="p-4 bg-white rounded-lg shadow flex justify-between items-center"
-  >
-    <div>
-      <h3 className="font-medium">{task.name}</h3>
-      <a
-        href={task.link}
-        className="text-blue-500 hover:underline"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        View Link
-      </a>
-    </div>
-    <button onClick={() => handleDeleteTask(task.id)} className="text-red-500 ml-2">
-      <Trash2 className="h-4 w-4" />
-    </button>
-    <button onClick={() => handleUpdateTask(task.id, 'New Task Name', 'New Task Link')} className="text-blue-500 ml-2">
-      Edit
-    </button>
-  </div>
-))} */}
+              
 
             </div>
           </div>
