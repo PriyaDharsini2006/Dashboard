@@ -274,12 +274,12 @@ export default function Login() {
             <div className="text-center">
               <p className="text-lg text-white">Welcome, {session.user.name}</p>
               <p className="text-sm text-gray-500">{session.user.email}</p>
-              {/* <button 
+              <button 
                 onClick={() => signOut()} 
                 className="w-full py-2 mt-4 text-white bg-green-900 rounded hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-green-500"
               >
                 Sign out
-              </button> */}
+              </button>
             </div>
           ) : (
             <div className="space-y-4">
