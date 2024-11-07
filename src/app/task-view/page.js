@@ -248,6 +248,22 @@ const TaskManager = () => {
             )}
           </div>
         )}
+
+        {/* Request Page */}
+        {isRequestPageVisible && (
+          <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-10">
+            <div className="bg-white p-8 rounded-lg shadow-lg">
+              <h3 className="text-xl font-semibold">Admin Request</h3>
+              <p className="mt-4">Please request admin access by providing your details here.</p>
+              <button
+                onClick={handleClose}
+                className="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
