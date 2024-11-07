@@ -29,7 +29,7 @@ const TaskView = () => {
   const handleRequestOpen = () => {
     setRequestPageVisible(true); // Open the request page
     setShowMainContent(false); // Hide the main content
-    router.push('/sign');
+    router.push('/task');
   };
 
   const handleClose = () => {
