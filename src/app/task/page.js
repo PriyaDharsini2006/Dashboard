@@ -172,42 +172,66 @@ const TaskManager = () => {
     }
   };
 
+  // Updated delete handlers with optimistic updates
   const handleDeleteGroup = async (groupId, e) => {
     e.stopPropagation();
     if (window.confirm('Are you sure you want to delete this group?')) {
       try {
+        // Optimistic update
+        const updatedGroups = groups.filter(group => group.id !== groupId);
+        setGroups(updatedGroups);
+        
+        if (selectedGroup?.id === groupId) {
+          setSelectedGroup(null);
+          setSelectedFolder(null);
+        }
+
         const response = await fetch(`/api/groups/${groupId}`, {
           method: 'DELETE',
         });
-        if (response.ok) {
-          if (selectedGroup?.id === groupId) {
-            setSelectedGroup(null);
-            setSelectedFolder(null);
-          }
+        
+        if (!response.ok) {
+          // Revert on failure
           await fetchGroups();
         }
       } catch (error) {
         console.error('Error deleting group:', error);
+        await fetchGroups();
       }
     }
   };
 
   const handleDeleteFolder = async (folderId, e) => {
     e.stopPropagation();
+    if (!selectedGroup) return;
     if (window.confirm('Are you sure you want to delete this folder?')) {
-      if (!selectedGroup) return;
       try {
+        // Optimistic update
+        const updatedGroup = {
+          ...selectedGroup,
+          folders: selectedGroup.folders.filter(folder => folder.id !== folderId)
+        };
+        
+        setSelectedGroup(updatedGroup);
+        setGroups(groups.map(group => 
+          group.id === selectedGroup.id ? updatedGroup : group
+        ));
+
+        if (selectedFolder?.id === folderId) {
+          setSelectedFolder(null);
+        }
+
         const response = await fetch(`/api/folders/${folderId}`, {
           method: 'DELETE',
         });
-        if (response.ok) {
-          if (selectedFolder?.id === folderId) {
-            setSelectedFolder(null);
-          }
+        
+        if (!response.ok) {
+          // Revert on failure
           await fetchGroups();
         }
       } catch (error) {
         console.error('Error deleting folder:', error);
+        await fetchGroups();
       }
     }
   };
@@ -216,14 +240,36 @@ const TaskManager = () => {
     if (!selectedFolder) return;
     if (window.confirm('Are you sure you want to delete this task?')) {
       try {
+        // Optimistic update
+        const updatedFolder = {
+          ...selectedFolder,
+          tasks: selectedFolder.tasks.filter(task => task.id !== taskId)
+        };
+        
+        const updatedGroup = {
+          ...selectedGroup,
+          folders: selectedGroup.folders.map(folder =>
+            folder.id === selectedFolder.id ? updatedFolder : folder
+          )
+        };
+        
+        setSelectedFolder(updatedFolder);
+        setSelectedGroup(updatedGroup);
+        setGroups(groups.map(group =>
+          group.id === selectedGroup.id ? updatedGroup : group
+        ));
+
         const response = await fetch(`/api/tasks/${taskId}`, {
           method: 'DELETE',
         });
-        if (response.ok) {
+        
+        if (!response.ok) {
+          // Revert on failure
           await fetchGroups();
         }
       } catch (error) {
         console.error('Error deleting task:', error);
+        await fetchGroups();
       }
     }
   };
@@ -236,10 +282,12 @@ const TaskManager = () => {
         body: JSON.stringify({ name })
       });
       if (response.ok) {
-        await fetchGroups();
+        const newGroup = await response.json();
+        setGroups([...groups, newGroup]);
       }
     } catch (error) {
       console.error('Error adding group:', error);
+      await fetchGroups();
     }
   };
 
@@ -252,10 +300,19 @@ const TaskManager = () => {
         body: JSON.stringify({ name, groupId: selectedGroup.id })
       });
       if (response.ok) {
-        await fetchGroups();
+        const newFolder = await response.json();
+        const updatedGroup = {
+          ...selectedGroup,
+          folders: [...(selectedGroup.folders || []), newFolder]
+        };
+        setSelectedGroup(updatedGroup);
+        setGroups(groups.map(group =>
+          group.id === selectedGroup.id ? updatedGroup : group
+        ));
       }
     } catch (error) {
       console.error('Error adding folder:', error);
+      await fetchGroups();
     }
   };
 
@@ -268,28 +325,67 @@ const TaskManager = () => {
         body: JSON.stringify({ name, link, folderId: selectedFolder.id })
       });
       if (response.ok) {
-        await fetchGroups();
+        const newTask = await response.json();
+        const updatedFolder = {
+          ...selectedFolder,
+          tasks: [...(selectedFolder.tasks || []), newTask]
+        };
+        const updatedGroup = {
+          ...selectedGroup,
+          folders: selectedGroup.folders.map(folder =>
+            folder.id === selectedFolder.id ? updatedFolder : folder
+          )
+        };
+        setSelectedFolder(updatedFolder);
+        setSelectedGroup(updatedGroup);
+        setGroups(groups.map(group =>
+          group.id === selectedGroup.id ? updatedGroup : group
+        ));
       }
     } catch (error) {
       console.error('Error adding task:', error);
+      await fetchGroups();
     }
   };
 
   const handleUpdateTask = async (taskId, name, link) => {
     try {
+      // Optimistic update
+      const updatedFolder = {
+        ...selectedFolder,
+        tasks: selectedFolder.tasks.map(task =>
+          task.id === taskId ? { ...task, name, link } : task
+        )
+      };
+      
+      const updatedGroup = {
+        ...selectedGroup,
+        folders: selectedGroup.folders.map(folder =>
+          folder.id === selectedFolder.id ? updatedFolder : folder
+        )
+      };
+      
+      setSelectedFolder(updatedFolder);
+      setSelectedGroup(updatedGroup);
+      setGroups(groups.map(group =>
+        group.id === selectedGroup.id ? updatedGroup : group
+      ));
+
       const response = await fetch(`/api/tasks/${taskId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, link })
       });
-      if (response.ok) {
+      
+      if (!response.ok) {
+        // Revert on failure
         await fetchGroups();
       }
     } catch (error) {
       console.error('Error updating task:', error);
+      await fetchGroups();
     }
   };
-
   return (
     <div className="flex h-screen bg-gray-100 text-gray-800">
       {/* Sidebar */}
