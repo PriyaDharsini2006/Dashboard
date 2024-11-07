@@ -1,6 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { PlusCircle, Trash2, X } from 'lucide-react';
+import Link from 'next/link';
 
 const Modal = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null;
@@ -8,7 +9,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white text-gray-800 rounded-lg p-6 w-full max-w-md relative">
-        <button 
+        <button
           onClick={onClose}
           className="absolute right-4 top-4 text-gray-500 hover:text-gray-700"
         >
@@ -33,11 +34,11 @@ const UpdateGroupDialog = ({ group, onUpdate }) => {
 
   return (
     <>
-      <button 
+      <button
         onClick={(e) => {
           e.stopPropagation();
           setIsOpen(true);
-        }} 
+        }}
         className="text-blue-500 mr-2"
       >
         Edit
@@ -72,11 +73,11 @@ const UpdateFolderDialog = ({ folder, onUpdate }) => {
 
   return (
     <>
-      <button 
+      <button
         onClick={(e) => {
           e.stopPropagation();
           setIsOpen(true);
-        }} 
+        }}
         className="text-blue-500 mr-2"
       >
         Edit
@@ -117,7 +118,7 @@ const AddItemDialog = ({ title, onSubmit }) => {
         <PlusCircle className="mr-2 h-4 w-4" />
         {title}
       </button>
-      
+
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title={title}>
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
@@ -148,7 +149,7 @@ const UpdateTaskDialog = ({ task, onUpdate }) => {
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)} className="text-blue-500 ml-2">Edit</button>
+      <button onClick={() => setIsOpen(true)} className="text-[#90EE90] ml-2">Edit</button>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Update Task">
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
@@ -191,7 +192,7 @@ const AddTaskDialog = ({ onSubmit }) => {
         <PlusCircle className="mr-2 h-4 w-4" />
         Add Task
       </button>
-      
+
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Add Task">
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
@@ -237,7 +238,7 @@ const TaskManager = () => {
         group.id === groupId ? { ...group, name } : group
       );
       setGroups(updatedGroups);
-      
+
       if (selectedGroup?.id === groupId) {
         setSelectedGroup({ ...selectedGroup, name });
       }
@@ -247,7 +248,7 @@ const TaskManager = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name })
       });
-      
+
       if (!response.ok) {
         // Revert on failure
         await fetchGroups();
@@ -268,7 +269,7 @@ const TaskManager = () => {
           folder.id === folderId ? { ...folder, name } : folder
         )
       };
-      
+
       setSelectedGroup(updatedGroup);
       setGroups(groups.map(group =>
         group.id === selectedGroup.id ? updatedGroup : group
@@ -283,7 +284,7 @@ const TaskManager = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name })
       });
-      
+
       if (!response.ok) {
         // Revert on failure
         await fetchGroups();
@@ -291,19 +292,20 @@ const TaskManager = () => {
     } catch (error) {
       console.error('Error updating folder:', error);
       await fetchGroups();
-    }};
-  
+    }
+  };
+
   const fetchGroups = async () => {
     try {
       const response = await fetch('/api/groups');
       const data = await response.json();
       setGroups(data);
-      
+
       // Update selectedGroup with fresh data if one is selected
       if (selectedGroup) {
         const updatedSelectedGroup = data.find(group => group.id === selectedGroup.id);
         setSelectedGroup(updatedSelectedGroup);
-        
+
         // Update selectedFolder with fresh data if one is selected
         if (selectedFolder && updatedSelectedGroup) {
           const updatedSelectedFolder = updatedSelectedGroup.folders.find(
@@ -312,7 +314,7 @@ const TaskManager = () => {
           setSelectedFolder(updatedSelectedFolder);
         }
       }
-      
+
       setLoading(false);
     } catch (error) {
       console.error('Error fetching groups:', error);
@@ -328,7 +330,7 @@ const TaskManager = () => {
         // Optimistic update
         const updatedGroups = groups.filter(group => group.id !== groupId);
         setGroups(updatedGroups);
-        
+
         if (selectedGroup?.id === groupId) {
           setSelectedGroup(null);
           setSelectedFolder(null);
@@ -337,7 +339,7 @@ const TaskManager = () => {
         const response = await fetch(`/api/groups/${groupId}`, {
           method: 'DELETE',
         });
-        
+
         if (!response.ok) {
           // Revert on failure
           await fetchGroups();
@@ -359,9 +361,9 @@ const TaskManager = () => {
           ...selectedGroup,
           folders: selectedGroup.folders.filter(folder => folder.id !== folderId)
         };
-        
+
         setSelectedGroup(updatedGroup);
-        setGroups(groups.map(group => 
+        setGroups(groups.map(group =>
           group.id === selectedGroup.id ? updatedGroup : group
         ));
 
@@ -372,7 +374,7 @@ const TaskManager = () => {
         const response = await fetch(`/api/folders/${folderId}`, {
           method: 'DELETE',
         });
-        
+
         if (!response.ok) {
           // Revert on failure
           await fetchGroups();
@@ -393,14 +395,14 @@ const TaskManager = () => {
           ...selectedFolder,
           tasks: selectedFolder.tasks.filter(task => task.id !== taskId)
         };
-        
+
         const updatedGroup = {
           ...selectedGroup,
           folders: selectedGroup.folders.map(folder =>
             folder.id === selectedFolder.id ? updatedFolder : folder
           )
         };
-        
+
         setSelectedFolder(updatedFolder);
         setSelectedGroup(updatedGroup);
         setGroups(groups.map(group =>
@@ -410,7 +412,7 @@ const TaskManager = () => {
         const response = await fetch(`/api/tasks/${taskId}`, {
           method: 'DELETE',
         });
-        
+
         if (!response.ok) {
           // Revert on failure
           await fetchGroups();
@@ -505,14 +507,14 @@ const TaskManager = () => {
           task.id === taskId ? { ...task, name, link } : task
         )
       };
-      
+
       const updatedGroup = {
         ...selectedGroup,
         folders: selectedGroup.folders.map(folder =>
           folder.id === selectedFolder.id ? updatedFolder : folder
         )
       };
-      
+
       setSelectedFolder(updatedFolder);
       setSelectedGroup(updatedGroup);
       setGroups(groups.map(group =>
@@ -524,7 +526,7 @@ const TaskManager = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, link })
       });
-      
+
       if (!response.ok) {
         // Revert on failure
         await fetchGroups();
@@ -560,31 +562,25 @@ const TaskManager = () => {
 
 
   return (
-    <div className="flex h-screen bg-gray-100 text-gray-800">
+    <div className="flex h-screen bg-gray-900 text-gray-200">
       {/* Sidebar */}
-      <div className="w-64 bg-white shadow-lg text-gray-900">
-        <div className="p-4 space-y-2">
-        <input
-            type="text"
-            placeholder="Search for groups..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-
+      <div className="w-full lg:w-64 bg-gray-800 shadow-lg overflow-y-auto">
+        <div className="p-4 flex justify-between items-center">
+          <Link href="./task-view" className="px-4 py-2 bg-blue-500 mr-[5px] text-white rounded hover:bg-blue-600">
+            Back
+          </Link>
           <AddItemDialog
             title="Add Group"
             onSubmit={handleAddGroup}
           />
         </div>
-        <div className="space-y-2">
-          {filteredGroups.map(group => (
+        <div className="space-y-2 px-4">
+          {groups.map(group => (
             <div
               key={group.id}
-              className={`p-3 cursor-pointer hover:bg-gray-100 ${
-                selectedGroup?.id === group.id ? 'bg-gray-200' : ''
-              } flex justify-between items-center`}
-              onClick={() => handleGroupSelect(group)}
+              className={`p-3 cursor-pointer hover:bg-gray-700 ${selectedGroup?.id === group.id ? 'bg-gray-600' : ''
+                } flex justify-between items-center`}
+              onClick={() => setSelectedGroup(group)}
             >
               <span>{group.name}</span>
               <div className="flex items-center">
@@ -593,7 +589,7 @@ const TaskManager = () => {
                   onUpdate={handleUpdateGroup}
                 />
                 <button
-                  className="text-gray-500 hover:text-red-500"
+                  className="text-gray-400 hover:text-red-500"
                   onClick={(e) => handleDeleteGroup(group.id, e)}
                 >
                   <Trash2 className="h-4 w-4" />
@@ -605,22 +601,28 @@ const TaskManager = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-8">
+      <div className="flex-1 p-8 overflow-y-auto">
         {selectedGroup && (
           <div>
-            <div className="mb-4">
+            <div className="mb-4 flex justify-between items-center">
               <AddItemDialog
                 title="Add Folder"
                 onSubmit={handleAddFolder}
               />
+              <div className="flex-1"></div>
+              <Link
+                href="./task-view"
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 ml-4"
+              >
+                Back
+              </Link>
             </div>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {selectedGroup.folders?.map(folder => (
                 <div
                   key={folder.id}
-                  className={`p-4 bg-white rounded-lg shadow cursor-pointer ${
-                    selectedFolder?.id === folder.id ? 'ring-2 ring-blue-500' : ''
-                  } flex justify-between items-center`}
+                  className={`p-4 bg-gray-800 rounded-lg shadow cursor-pointer ${selectedFolder?.id === folder.id ? 'ring-2 ring-blue-500' : ''
+                    } flex justify-between items-center`}
                   onClick={() => setSelectedFolder(folder)}
                 >
                   <span>{folder.name}</span>
@@ -630,7 +632,7 @@ const TaskManager = () => {
                       onUpdate={handleUpdateFolder}
                     />
                     <button
-                      className="text-gray-500 hover:text-red-500"
+                      className="text-gray-400 hover:text-red-500"
                       onClick={(e) => handleDeleteFolder(folder.id, e)}
                     >
                       <Trash2 className="h-4 w-4" />
@@ -644,17 +646,24 @@ const TaskManager = () => {
 
         {selectedGroup && selectedFolder && (
           <div className="mt-8">
-            <div className="mb-4">
+            <div className="mb-4 flex justify-between items-center">
               <AddTaskDialog onSubmit={handleAddTask} />
+              <div className="flex-1"></div>
+              <Link
+                href="./task-view"
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 ml-4"
+              >
+                Back
+              </Link>
             </div>
             <div className="space-y-4">
               {selectedFolder.tasks?.map(task => (
                 <div
                   key={task.id}
-                  className="p-4 bg-white rounded-lg shadow flex justify-between items-center"
+                  className="p-4 bg-gray-800 rounded-lg shadow flex flex-col sm:flex-row justify-between items-center"
                 >
                   <div>
-                    <h3 className="font-medium">{task.name}</h3>
+                    <h3 className="font-medium text-white">{task.name}</h3>
                     <a
                       href={task.link}
                       className="text-blue-500 hover:underline"
@@ -669,7 +678,7 @@ const TaskManager = () => {
                     />
                   </div>
                   <button
-                    className="text-gray-500 hover:text-red-500"
+                    className="text-gray-400 hover:text-red-500 mt-4 sm:mt-0"
                     onClick={() => handleDeleteTask(task.id)}
                   >
                     <Trash2 className="h-4 w-4" />

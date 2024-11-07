@@ -238,11 +238,11 @@
 
 .glitchText::before,
 .glitchText::after {
-  content: 'ACESS GRANTED';
+  /* content: 'ACESS GRANTED'; */
   position:absolute;
   top: 0;
   left: 0;
-  color: rgba(255, 0, 0, 0.1);
+  /* color: rgba(255, 0, 0, 0.1); */
   text-shadow: 0px 0 green;
   pointer-events: none;
   animation: glitchTextLayer 1.5s infinite;

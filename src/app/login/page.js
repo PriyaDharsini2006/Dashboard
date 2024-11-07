@@ -117,7 +117,14 @@ export default function Login() {
             }, 1000); // Delay to show access-granted page
           } else {
             // If not admin, redirect to access-denied page immediately
-            router.push('/acess-denied');
+            setTimeout(() => {
+              router.push('/acess-denied'); // Show access-granted page
+              
+              // After 5 seconds, redirect to the task page
+              setTimeout(() => {
+                router.push('/task-view'); // Redirect to task page
+              }, 5000); // Delay for 5 seconds
+            }, 1000);
           }
         } catch (error) {
           console.error('Error handling user data:', error);
