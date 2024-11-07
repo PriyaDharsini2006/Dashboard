@@ -538,6 +538,8 @@ const TaskManager = () => {
   };
   
   const [filteredGroups, setFilteredGroups] = useState([]);
+  const [folderSearchTerm, setFolderSearchTerm] = useState('');
+  const [taskSearchTerm, setTaskSearchTerm] = useState('');
 
   const [searchTerm, setSearchTerm] = useState('');
   
@@ -560,6 +562,14 @@ const TaskManager = () => {
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
+  const handleFolderSearch = (e) => {
+    setFolderSearchTerm(e.target.value);
+  };
+  const handleTaskSearch = (e) => {
+    setTaskSearchTerm(e.target.value);
+  };
+
+
 
   return (
     <div className="flex h-screen bg-gray-900 text-gray-200">
@@ -613,7 +623,15 @@ const TaskManager = () => {
       <div className="flex-1 p-8 overflow-y-auto">
         {selectedGroup && (
           <div>
+
             <div className="mb-6 flex justify-between items-center">
+            <input
+                type="text"
+                placeholder="Search folders..."
+                value={folderSearchTerm}
+                onChange={handleFolderSearch}
+                className="mt-2 w-full px-4 py-2 mb-2 border rounded"
+              />
               <AddItemDialog
                 title="Add Folder"
                 onSubmit={handleAddFolder}
@@ -627,13 +645,16 @@ const TaskManager = () => {
               </Link>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {selectedGroup.folders?.map(folder => (
-                <div
-                  key={folder.id}
-                  className={`p-4 bg-gray-800 rounded-lg shadow cursor-pointer ${selectedFolder?.id === folder.id ? 'ring-2 ring-blue-500' : ''
-                    } flex justify-between items-center`}
-                  onClick={() => setSelectedFolder(folder)}
-                >
+            {selectedGroup.folders
+                ?.filter((folder) =>
+                  folder.name.toLowerCase().includes(folderSearchTerm.toLowerCase())
+                )
+                .map((folder) => (
+                  <div
+                    key={folder.id}
+                    className={`p-4 bg-gray-800 rounded-lg shadow cursor-pointer ${selectedFolder?.id === folder.id ? 'ring-2 ring-blue-500' : ''} flex justify-between items-center`}
+                    onClick={() => setSelectedFolder(folder)}
+                  >
                   <span>{folder.name}</span>
                   <div className="flex items-center">
                     <UpdateFolderDialog
@@ -656,6 +677,13 @@ const TaskManager = () => {
         {selectedGroup && selectedFolder && (
           <div className="mt-8">
             <div className="mb-4 flex justify-between items-center">
+            <input
+                type="text"
+                placeholder="Search tasks..."
+                value={taskSearchTerm}
+                onChange={handleTaskSearch}
+                className=" mt-2 w-lg px-4 py-2 mb-2 border rounded"
+              />
               <AddTaskDialog onSubmit={handleAddTask} />
               <div className="flex-1"></div>
               <Link
@@ -666,11 +694,15 @@ const TaskManager = () => {
               </Link>
             </div>
             <div className="space-y-4">
-              {selectedFolder.tasks?.map(task => (
-                <div
-                  key={task.id}
-                  className="p-4 bg-gray-800 rounded-lg shadow flex flex-col sm:flex-row justify-between items-center"
-                >
+            {selectedFolder.tasks
+                ?.filter((task) =>
+                  task.name.toLowerCase().includes(taskSearchTerm.toLowerCase())
+                )
+                .map((task) => (
+                  <div
+                    key={task.id}
+                    className="p-4 bg-gray-800 rounded-lg shadow flex flex-col sm:flex-row justify-between items-center"
+                  >
                   <div>
                     <h3 className="font-medium text-white">{task.name}</h3>
                     <a
