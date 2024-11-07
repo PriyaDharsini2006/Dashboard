@@ -564,24 +564,24 @@ const TaskManager = () => {
   return (
     <div className="flex h-screen bg-gray-900 text-gray-200">
       {/* Sidebar */}
-      <div className="mt-4 w-full lg:w-64 bg-gray-800 shadow-lg overflow-y-auto">
+      <div className="mt-4 w-full lg:w-96 bg-gray-800 shadow-lg overflow-y-auto">
       <input
           type="text"
           placeholder="Search groups..."
           value={searchTerm}
           onChange={handleSearch}
-          className="w-full px-4 py-2 mb-2 border rounded"
+          className="w-full px-4 py-2 mb-3 border rounded"
         />
         <div className="p-4 flex justify-between items-center">
 
         <AddItemDialog title="Add Group" onSubmit={handleAddGroup} />
-          <Link href="./task-view" className="px-4 py-2 bg-blue-500 mr-[5px] text-white rounded hover:bg-blue-600">
+          <Link href="./task-view" className="px-12 ml-5 py-2 bg-blue-500 mr-[10px] text-white rounded hover:bg-blue-600">
             Back
           </Link>
-          <AddItemDialog
+          {/* <AddItemDialog
             title="Add Group"
             onSubmit={handleAddGroup}
-          />
+          /> */}
         </div>
         <div className="space-y-2 px-4">
           {filteredGroups.map(group => (
@@ -613,7 +613,7 @@ const TaskManager = () => {
       <div className="flex-1 p-8 overflow-y-auto">
         {selectedGroup && (
           <div>
-            <div className="mb-4 flex justify-between items-center">
+            <div className="mb-6 flex justify-between items-center">
               <AddItemDialog
                 title="Add Folder"
                 onSubmit={handleAddFolder}
