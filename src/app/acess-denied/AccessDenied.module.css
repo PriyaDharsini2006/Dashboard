@@ -140,8 +140,8 @@
 
 .glitchText::before,
 .glitchText::after {
-    content: 'ACESS DENIED';
-    position:-ms-page;
+    /* content: 'ACESS DENIED'; */
+    position:absolute;
     top: 0;
     left: 0;
     color: rgba(255, 0, 0, 0.1);
