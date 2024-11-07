@@ -149,7 +149,7 @@ const UpdateTaskDialog = ({ task, onUpdate }) => {
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)} className="text-blue-500 ml-2">Edit</button>
+      <button onClick={() => setIsOpen(true)} className="text-[#90EE90] ml-2">Edit</button>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Update Task">
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
@@ -537,11 +537,11 @@ const TaskManager = () => {
     }
   };
   return (
-    <div className="flex flex-col lg:flex-row h-screen bg-gray-100 text-gray-800">
+    <div className="flex h-screen bg-gray-900 text-gray-200">
       {/* Sidebar */}
-      <div className="w-full lg:w-64 bg-white shadow-lg text-gray-900">
+      <div className="w-full lg:w-64 bg-gray-800 shadow-lg overflow-y-auto">
         <div className="p-4 flex justify-between items-center">
-          <Link href="./task-view" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+          <Link href="./task-view" className="px-4 py-2 bg-blue-500 mr-[5px] text-white rounded hover:bg-blue-600">
             Back
           </Link>
           <AddItemDialog
@@ -553,9 +553,9 @@ const TaskManager = () => {
           {groups.map(group => (
             <div
               key={group.id}
-              className={`p-3 cursor-pointer hover:bg-gray-100 ${selectedGroup?.id === group.id ? 'bg-gray-200' : ''
+              className={`p-3 cursor-pointer hover:bg-gray-700 ${selectedGroup?.id === group.id ? 'bg-gray-600' : ''
                 } flex justify-between items-center`}
-              onClick={() => handleGroupSelect(group)}
+              onClick={() => setSelectedGroup(group)}
             >
               <span>{group.name}</span>
               <div className="flex items-center">
@@ -564,7 +564,7 @@ const TaskManager = () => {
                   onUpdate={handleUpdateGroup}
                 />
                 <button
-                  className="text-gray-500 hover:text-red-500"
+                  className="text-gray-400 hover:text-red-500"
                   onClick={(e) => handleDeleteGroup(group.id, e)}
                 >
                   <Trash2 className="h-4 w-4" />
@@ -576,7 +576,7 @@ const TaskManager = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-8">
+      <div className="flex-1 p-8 overflow-y-auto">
         {selectedGroup && (
           <div>
             <div className="mb-4 flex justify-between items-center">
@@ -596,7 +596,7 @@ const TaskManager = () => {
               {selectedGroup.folders?.map(folder => (
                 <div
                   key={folder.id}
-                  className={`p-4 bg-white rounded-lg shadow cursor-pointer ${selectedFolder?.id === folder.id ? 'ring-2 ring-blue-500' : ''
+                  className={`p-4 bg-gray-800 rounded-lg shadow cursor-pointer ${selectedFolder?.id === folder.id ? 'ring-2 ring-blue-500' : ''
                     } flex justify-between items-center`}
                   onClick={() => setSelectedFolder(folder)}
                 >
@@ -607,7 +607,7 @@ const TaskManager = () => {
                       onUpdate={handleUpdateFolder}
                     />
                     <button
-                      className="text-gray-500 hover:text-red-500"
+                      className="text-gray-400 hover:text-red-500"
                       onClick={(e) => handleDeleteFolder(folder.id, e)}
                     >
                       <Trash2 className="h-4 w-4" />
@@ -635,10 +635,10 @@ const TaskManager = () => {
               {selectedFolder.tasks?.map(task => (
                 <div
                   key={task.id}
-                  className="p-4 bg-white rounded-lg shadow flex flex-col sm:flex-row justify-between items-center"
+                  className="p-4 bg-gray-800 rounded-lg shadow flex flex-col sm:flex-row justify-between items-center"
                 >
                   <div>
-                    <h3 className="font-medium text-black">{task.name}</h3>
+                    <h3 className="font-medium text-white">{task.name}</h3>
                     <a
                       href={task.link}
                       className="text-blue-500 hover:underline"
@@ -653,7 +653,7 @@ const TaskManager = () => {
                     />
                   </div>
                   <button
-                    className="text-gray-500 hover:text-red-500 mt-4 sm:mt-0"
+                    className="text-gray-400 hover:text-red-500 mt-4 sm:mt-0"
                     onClick={() => handleDeleteTask(task.id)}
                   >
                     <Trash2 className="h-4 w-4" />

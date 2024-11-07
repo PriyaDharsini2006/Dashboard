@@ -98,21 +98,22 @@ const TaskView = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow-sm border-b">
+    <div className="min-h-screen bg-gray-900 text-gray-200">
+      {/* Navbar */}
+      <nav className="bg-gray-800 shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="./Navbar" className="flex items-center">
-              <Home className="h-6 w-6 text-gray-500" />
-              <span className="ml-2 font-semibold text-gray-900">Task Manager</span>
+              <Home className="h-6 w-6 text-gray-400" />
+              <span className="ml-2 font-semibold text-gray-200">Task Manager</span>
             </Link>
             <div className="flex items-center space-x-4">
-              <button onClick={handleRequestOpen} className="bg-green-600 text-white px-4 py-2 rounded-md">
-                <Shield className="mr-2 h-4 w-4" />
+              <button onClick={handleRequestOpen} className="bg-green-600 text-white px-4 py-2 rounded-md flex flex-row">
+                <Shield className="mr-2 h-4 w-4 mt-1" />
                 Admin Portal
               </button>
-              <button onClick={handleSignOut} className="bg-red-600 text-white px-4 py-2 rounded-md">
-                <LogOut className="mr-2 h-4 w-4" />
+              <button onClick={handleSignOut} className="bg-red-600 text-white px-4 py-2 rounded-md flex flex-row">
+                <LogOut className="mr-2 h-4 w-4 mt-1" />
                 Sign Out
               </button>
             </div>
@@ -120,35 +121,36 @@ const TaskView = () => {
         </div>
       </nav>
 
+      {/* Search Input */}
       <div className="max-w-7xl mx-auto px-4 py-4">
         <input
           type="text"
           placeholder="Search Groups, Folders, or Tasks"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full px-4 py-2 border rounded-md"
+          className="w-full px-4 py-2 border rounded-md bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
 
-       {/* Breadcrumb Navigation */}
-       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      {/* Breadcrumb Navigation */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <nav className="flex" aria-label="Breadcrumb">
           <ol className="flex items-center space-x-4">
             <li>
               <button
                 onClick={handleBackToGroups}
-                className="text-gray-600 hover:text-gray-900"
+                className="text-gray-400 hover:text-gray-200"
               >
                 Groups
               </button>
             </li>
             {selectedGroup && (
               <>
-                <ChevronRight className="flex-shrink-0 h-5 w-5 text-gray-400" />
+                <ChevronRight className="flex-shrink-0 h-5 w-5 text-gray-500" />
                 <li>
                   <button
                     onClick={handleBackToFolders}
-                    className="text-gray-600 hover:text-gray-900"
+                    className="text-gray-400 hover:text-gray-200"
                   >
                     {selectedGroup.name}
                   </button>
@@ -157,14 +159,15 @@ const TaskView = () => {
             )}
             {selectedFolder && (
               <>
-                <ChevronRight className="flex-shrink-0 h-5 w-5 text-gray-400" />
-                <li className="text-gray-900 font-medium">{selectedFolder.name}</li>
+                <ChevronRight className="flex-shrink-0 h-5 w-5 text-gray-500" />
+                <li className="text-gray-200 font-medium">{selectedFolder.name}</li>
               </>
             )}
           </ol>
         </nav>
       </div>
 
+      {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8">
         {showMainContent && (
           <div>
@@ -174,11 +177,11 @@ const TaskView = () => {
                   <button
                     key={group.id}
                     onClick={() => setSelectedGroup(group)}
-                    className="bg-white rounded-lg p-6 shadow-sm text-left"
+                    className="bg-gray-800 rounded-lg p-6 shadow-sm text-left"
                   >
                     <Folder className="h-6 w-6 text-blue-500" />
-                    <h3>{group.name}</h3>
-                    <p>{group.folders?.length || 0} folders</p>
+                    <h3 className="text-gray-200">{group.name}</h3>
+                    <p className="text-gray-400">{group.folders?.length || 0} folders</p>
                   </button>
                 ))}
               </div>
@@ -189,21 +192,21 @@ const TaskView = () => {
                   <button
                     key={folder.id}
                     onClick={() => setSelectedFolder(folder)}
-                    className="bg-white rounded-lg p-6 shadow-sm text-left"
+                    className="bg-gray-800 rounded-lg p-6 shadow-sm text-left"
                   >
                     <FileText className="h-6 w-6 text-blue-500" />
-                    <h3>{folder.name}</h3>
-                    <p>{folder.tasks?.length || 0} tasks</p>
+                    <h3 className="text-gray-200">{folder.name}</h3>
+                    <p className="text-gray-400">{folder.tasks?.length || 0} tasks</p>
                   </button>
                 ))}
               </div>
             )}
             {selectedFolder && (
-              <div>
+              <div className="space-y-6">
                 {filteredTasks.map(task => (
-                  <div key={task.id} className="bg-white rounded-lg p-6 shadow-sm">
-                    <h3>{task.name}</h3>
-                    <a href={task.link} target="_blank" rel="noopener noreferrer" className="text-blue-600">
+                  <div key={task.id} className="bg-gray-800 rounded-lg p-6 shadow-sm">
+                    <h3 className="text-gray-200">{task.name}</h3>
+                    <a href={task.link} target="_blank" rel="noopener noreferrer" className="text-blue-500">
                       View Link <ChevronRight />
                     </a>
                   </div>
