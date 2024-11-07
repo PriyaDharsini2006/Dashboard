@@ -21,6 +21,85 @@ const Modal = ({ isOpen, onClose, title, children }) => {
   );
 };
 
+const UpdateGroupDialog = ({ group, onUpdate }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [name, setName] = useState(group?.name || '');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onUpdate(group.id, name);
+    setIsOpen(false);
+  };
+
+  return (
+    <>
+      <button 
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsOpen(true);
+        }} 
+        className="text-blue-500 mr-2"
+      >
+        Edit
+      </button>
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Update Group">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            placeholder="Group Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full px-4 py-2 border rounded"
+          />
+          <button type="submit" className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+            Update
+          </button>
+        </form>
+      </Modal>
+    </>
+  );
+};
+
+const UpdateFolderDialog = ({ folder, onUpdate }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [name, setName] = useState(folder?.name || '');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onUpdate(folder.id, name);
+    setIsOpen(false);
+  };
+
+  return (
+    <>
+      <button 
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsOpen(true);
+        }} 
+        className="text-blue-500 mr-2"
+      >
+        Edit
+      </button>
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Update Folder">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            placeholder="Folder Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full px-4 py-2 border rounded"
+          />
+          <button type="submit" className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+            Update
+          </button>
+        </form>
+      </Modal>
+    </>
+  );
+};
+
+
 const AddItemDialog = ({ title, onSubmit }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState('');
@@ -151,6 +230,69 @@ const TaskManager = () => {
     setSelectedFolder(null); // Clear selected folder when switching groups
   };
 
+  const handleUpdateGroup = async (groupId, name) => {
+    try {
+      // Optimistic update
+      const updatedGroups = groups.map(group =>
+        group.id === groupId ? { ...group, name } : group
+      );
+      setGroups(updatedGroups);
+      
+      if (selectedGroup?.id === groupId) {
+        setSelectedGroup({ ...selectedGroup, name });
+      }
+
+      const response = await fetch(`/api/groups/${groupId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name })
+      });
+      
+      if (!response.ok) {
+        // Revert on failure
+        await fetchGroups();
+      }
+    } catch (error) {
+      console.error('Error updating group:', error);
+      await fetchGroups();
+    }
+  };
+
+  const handleUpdateFolder = async (folderId, name) => {
+    if (!selectedGroup) return;
+    try {
+      // Optimistic update
+      const updatedGroup = {
+        ...selectedGroup,
+        folders: selectedGroup.folders.map(folder =>
+          folder.id === folderId ? { ...folder, name } : folder
+        )
+      };
+      
+      setSelectedGroup(updatedGroup);
+      setGroups(groups.map(group =>
+        group.id === selectedGroup.id ? updatedGroup : group
+      ));
+
+      if (selectedFolder?.id === folderId) {
+        setSelectedFolder({ ...selectedFolder, name });
+      }
+
+      const response = await fetch(`/api/folders/${folderId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name })
+      });
+      
+      if (!response.ok) {
+        // Revert on failure
+        await fetchGroups();
+      }
+    } catch (error) {
+      console.error('Error updating folder:', error);
+      await fetchGroups();
+    }};
+  
   const fetchGroups = async () => {
     try {
       const response = await fetch('/api/groups');
@@ -412,12 +554,18 @@ const TaskManager = () => {
               onClick={() => handleGroupSelect(group)}
             >
               <span>{group.name}</span>
-              <button
-                className="text-gray-500 hover:text-red-500"
-                onClick={(e) => handleDeleteGroup(group.id, e)}
-              >
-                <Trash2 className="h-4 w-4" />
-              </button>
+              <div className="flex items-center">
+                <UpdateGroupDialog
+                  group={group}
+                  onUpdate={handleUpdateGroup}
+                />
+                <button
+                  className="text-gray-500 hover:text-red-500"
+                  onClick={(e) => handleDeleteGroup(group.id, e)}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -443,12 +591,18 @@ const TaskManager = () => {
                   onClick={() => setSelectedFolder(folder)}
                 >
                   <span>{folder.name}</span>
-                  <button
-                    className="text-gray-500 hover:text-red-500"
-                    onClick={(e) => handleDeleteFolder(folder.id, e)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
+                  <div className="flex items-center">
+                    <UpdateFolderDialog
+                      folder={folder}
+                      onUpdate={handleUpdateFolder}
+                    />
+                    <button
+                      className="text-gray-500 hover:text-red-500"
+                      onClick={(e) => handleDeleteFolder(folder.id, e)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
