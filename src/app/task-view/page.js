@@ -130,6 +130,41 @@ const TaskView = () => {
         />
       </div>
 
+       {/* Breadcrumb Navigation */}
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <nav className="flex" aria-label="Breadcrumb">
+          <ol className="flex items-center space-x-4">
+            <li>
+              <button
+                onClick={handleBackToGroups}
+                className="text-gray-600 hover:text-gray-900"
+              >
+                Groups
+              </button>
+            </li>
+            {selectedGroup && (
+              <>
+                <ChevronRight className="flex-shrink-0 h-5 w-5 text-gray-400" />
+                <li>
+                  <button
+                    onClick={handleBackToFolders}
+                    className="text-gray-600 hover:text-gray-900"
+                  >
+                    {selectedGroup.name}
+                  </button>
+                </li>
+              </>
+            )}
+            {selectedFolder && (
+              <>
+                <ChevronRight className="flex-shrink-0 h-5 w-5 text-gray-400" />
+                <li className="text-gray-900 font-medium">{selectedFolder.name}</li>
+              </>
+            )}
+          </ol>
+        </nav>
+      </div>
+
       <main className="max-w-7xl mx-auto px-4 py-8">
         {showMainContent && (
           <div>
