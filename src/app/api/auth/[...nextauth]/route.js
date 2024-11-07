@@ -22,7 +22,7 @@ export const authOptions = {
           return true;  // Allow only users from CIT Chennai
         } else {
           console.log(`Invalid Email ${profile.email}`);
-          return "/error"; // Redirect to error page if unauthorized
+          return "/acess-denied"; // Redirect to error page if unauthorized
         }
       }
       return true; // Default to allow sign-in

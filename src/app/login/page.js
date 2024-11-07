@@ -26,16 +26,24 @@ export default function Login() {
           const { isAdmin, redirect } = await response.json();
 
           if (isAdmin) {
-            router.push('/task');
+            // If admin, redirect to access-granted page first
+            setTimeout(() => {
+              router.push('/acess-granted'); // Show access-granted page
+              
+              // After 5 seconds, redirect to the task page
+              setTimeout(() => {
+                router.push('/task'); // Redirect to task page
+              }, 5000); // Delay for 5 seconds
+            }, 1000); // Delay to show access-granted page
           } else {
-            router.push('/error');
+            // If not admin, redirect to access-denied page immediately
+            router.push('/acess-denied');
           }
         } catch (error) {
           console.error('Error handling user data:', error);
         }
       }
     };
-
     if (status === 'authenticated') {
       handleUserLogin();
     }
@@ -54,18 +62,7 @@ export default function Login() {
         <div className={styles.signin}>
           <div className={styles.content}>
             <h1 className={`${styles.header} text-2xl font-bold text-center text-green-400`}>USE COLLEGE MAIL ID</h1>
-            {session ? (
-              <div className="text-center">
-                <p className="text-lg text-white">Welcome, {session.user.name}</p>
-                <p className="text-sm text-gray-500">{session.user.email}</p>
-                <button 
-                  onClick={() => signOut()} 
-                  className="w-full py-2 mt-4 text-white bg-green-900 rounded hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-green-500"
-                >
-                  Sign out
-                </button>
-              </div>
-            ) : (
+            
               <div className="space-y-4">
                 <button 
                   onClick={() => signIn("google")} 
@@ -74,7 +71,6 @@ export default function Login() {
                   Sign in with Google
                 </button>
               </div>
-            )}
           </div>
         </div>
       </section>
