@@ -557,15 +557,24 @@ const TaskManager = () => {
     }
   }, [searchTerm, groups]);
 
-  
-
-
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
 
   return (
     <div className="flex h-screen bg-gray-900 text-gray-200">
       {/* Sidebar */}
-      <div className="w-full lg:w-64 bg-gray-800 shadow-lg overflow-y-auto">
+      <div className="mt-4 w-full lg:w-64 bg-gray-800 shadow-lg overflow-y-auto">
+      <input
+          type="text"
+          placeholder="Search groups..."
+          value={searchTerm}
+          onChange={handleSearch}
+          className="w-full px-4 py-2 mb-2 border rounded"
+        />
         <div className="p-4 flex justify-between items-center">
+
+        <AddItemDialog title="Add Group" onSubmit={handleAddGroup} />
           <Link href="./task-view" className="px-4 py-2 bg-blue-500 mr-[5px] text-white rounded hover:bg-blue-600">
             Back
           </Link>
@@ -575,7 +584,7 @@ const TaskManager = () => {
           />
         </div>
         <div className="space-y-2 px-4">
-          {groups.map(group => (
+          {filteredGroups.map(group => (
             <div
               key={group.id}
               className={`p-3 cursor-pointer hover:bg-gray-700 ${selectedGroup?.id === group.id ? 'bg-gray-600' : ''
