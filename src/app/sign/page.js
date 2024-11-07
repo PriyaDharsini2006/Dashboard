@@ -1,312 +1,15 @@
-// // // // 'use client'
 
-// // // // import { useSession, signIn, signOut } from "next-auth/react";
-// // // // import { useRouter } from "next/navigation";
-// // // // import { useEffect } from "react";
-
-
-// // // // export default function Login() {
-// // // //   const { data: session, status } = useSession();
-// // // //   const router = useRouter()
-
-// // // //   useEffect(() => {
-// // // //     if (status === 'authenticated') {
-// // // //       // router.push('/')
-// // // //     }
-// // // //   }, [session, status, router])
-
-// // // //   if (status === "loading") {
-// // // //     return <p>Loading...</p>; // Show loading while session loads
-// // // //   }
-
-// // // //   if (session) {
-// // // //     return (
-// // // //       <div>
-// // // //         <p>Welcome, {session.user.name}</p>
-// // // //         <p>Email: {session.user.email}</p>
-// // // //         <button onClick={() => signOut()}>Sign out</button>
-// // // //       </div>
-// // // //     );
-// // // //   } else {
-// // // //     return (
-// // // //       <div>
-// // // //         <button onClick={() => signIn("google", { callbackUrl: '/' })}>Sign in with Google</button>
-// // // //       </div>
-// // // //     );
-// // // //   }
-// // // // }
-// // // 'use client';
-
-// // // import { useSession, signIn, signOut } from "next-auth/react";
-// // // import { useEffect } from "react";
-// // // import { useRouter } from "next/navigation";
-// // // import '../globals.css'; // Ensure to import your CSS file here
-
-// // // export default function Login() {
-// // //   const { data: session, status } = useSession();
-// // //   const router = useRouter();
-
-// // //   useEffect(() => {
-// // //     if (status === 'loading') return; // Don't redirect while loading
-// // //     // if (status === 'authenticated') {
-// // //     //   // Navigate to the desired page after authentication
-// // //     //   router.push('/');
-// // //     // } else {
-// // //     //   // If not authenticated, you can keep the user on the login page
-// // //     //   // You can also display a message or prompt for sign-in if desired
-// // //     // }
-// // //   }, [status, router]);
-
-// // //   if (status === "loading") {
-// // //     return <p className="text-center text-white">Loading...</p>;
-// // //   }
-
-// // //   return (
-// // //     <section>
-// // //       {/* Grid of Animated Boxes */}
-// // //       {Array.from({ length: 625 }).map((_, index) => (
-// // //         <span key={index}></span>
-// // //       ))}
-      
-
-// // //       {/* Sign-in Form */}
-// // //       <div className="signin">
-// // //         <div className="content">
-          
-// // //           <h1 className="text-2xl font-bold text-center text-green-400">USE COLLEGE MAIL ID</h1>
-// // //           {session ? (
-// // //             <div className="text-center">
-// // //               <p className="text-lg text-white">Welcome, {session.user.name}</p>
-// // //               <p className="text-sm text-gray-500">{session.user.email}</p>
-// // //               <button 
-// // //                 onClick={() => signOut()} 
-// // //                 className="w-full py-2 mt-4 text-white bg-green-900 rounded hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-green-500"
-// // //               >
-// // //                 Sign out
-// // //               </button>
-// // //             </div>
-// // //           ) : (
-// // //             <div className="space-y-4">
-// // //               <button 
-// // //                 onClick={() => signIn("google", { callbackUrl: '/' })} 
-// // //                 className="w-[200px] py-3 text-black  text-xl  bg-green-600  hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
-// // //               >
-// // //                 Sign in with Google
-// // //               </button>
-// // //               </div>
-// // //           )}
-// // //         </div>
-// // //       </div>
-// // //     </section>
-// // //   );
-// // // }
-// // 'use client';
-
-// // import { useSession, signIn, signOut } from "next-auth/react";
-// // import { useEffect } from "react";
-// // import { useRouter } from "next/navigation";
-// // import '../globals.css';
-
-// // // Create a new file named `/lib/prisma.ts` and add this code:
-// // // import { PrismaClient } from '@prisma/client'
-// // // const prisma = new PrismaClient()
-// // // export default prisma
-
-// // // Import the Prisma client
-// // import prisma from '@/lib/prisma';
-
-// // export default function Login() {
-// //   const { data: session, status } = useSession();
-// //   const router = useRouter();
-
-// //   useEffect(() => {
-// //     const addUserToDatabase = async () => {
-// //       if (session?.user?.email) {
-// //         try {
-// //           // Check if user already exists
-// //           const existingUser = await fetch('/api/check-user', {
-// //             method: 'POST',
-// //             headers: {
-// //               'Content-Type': 'application/json',
-// //             },
-// //             body: JSON.stringify({
-// //               email: session.user.email,
-// //             }),
-// //           });
-
-// //           const { exists } = await existingUser.json();
-
-// //           if (!exists) {
-// //             // If user doesn't exist, create new user
-// //             const response = await fetch('/api/create-user', {
-// //               method: 'POST',
-// //               headers: {
-// //                 'Content-Type': 'application/json',
-// //               },
-// //               body: JSON.stringify({
-// //                 email: session.user.email,
-// //                 name: session.user.name || '',
-// //               }),
-// //             });
-
-// //             if (!response.ok) {
-// //               throw new Error('Failed to create user');
-// //             }
-// //           }
-
-// //           // Redirect to task-view page after successful authentication and database operation
-// //           router.push('/task-view');
-// //         } catch (error) {
-// //           console.error('Error handling user data:', error);
-// //           // Handle error appropriately
-// //         }
-// //       }
-// //     };
-
-// //     if (status === 'authenticated') {
-// //       addUserToDatabase();
-// //     }
-// //   }, [session, status, router]);
-
-// //   if (status === "loading") {
-// //     return <p className="text-center text-white">Loading...</p>;
-// //   }
-
-// //   return (
-// //     <section>
-// //       {/* Grid of Animated Boxes */}
-// //       {Array.from({ length: 625 }).map((_, index) => (
-// //         <span key={index}></span>
-// //       ))}
-
-// //       {/* Sign-in Form */}
-// //       <div className="signin">
-// //         <div className="content">
-// //           <h1 className="text-2xl font-bold text-center text-green-400">USE COLLEGE MAIL ID</h1>
-// //           {session ? (
-// //             <div className="text-center">
-// //               <p className="text-lg text-white">Welcome, {session.user.name}</p>
-// //               <p className="text-sm text-gray-500">{session.user.email}</p>
-// //               <button 
-// //                 onClick={() => signOut()} 
-// //                 className="w-full py-2 mt-4 text-white bg-green-900 rounded hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-green-500"
-// //               >
-// //                 Sign out
-// //               </button>
-// //             </div>
-// //           ) : (
-// //             <div className="space-y-4">
-// //               <button 
-// //                 onClick={() => signIn("google")} 
-// //                 className="w-[200px] py-3 text-black text-xl bg-green-600 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
-// //               >
-// //                 Sign in with Google
-// //               </button>
-// //             </div>
-// //           )}
-// //         </div>
-// //       </div>
-// //     </section>
-// //   );
-// // }
-// // 'use client';
-
-// // import { useSession, signIn, signOut } from "next-auth/react";
-// // import { useEffect } from "react";
-// // import { useRouter } from "next/navigation";
-// // import '../globals.css';
-
-
-// // export default function Login() {
-// //   const { data: session, status } = useSession();
-// //   const router = useRouter();
-
-// //   useEffect(() => {
-// //     const handleUserLogin = async () => {
-// //       if (session?.user?.email) {
-// //         try {
-// //           const response = await fetch('/api/check-user', {
-// //             method: 'POST',
-// //             headers: {
-// //               'Content-Type': 'application/json',
-// //             },
-// //             body: JSON.stringify({
-// //               email: session.user.email,
-// //             }),
-// //           });
-
-// //           const { isAdmin, redirect } = await response.json();
-
-// //           if (isAdmin) {
-// //             // Redirect to the task page if the user is an admin
-// //             router.push('/Navbar');
-// //           } else {
-// //             // Redirect to the task-view page for regular users
-// //             router.push('/Navbar');
-// //           }
-// //         } catch (error) {
-// //           console.error('Error handling user data:', error);
-// //           // Handle error appropriately
-// //         }
-// //       }
-// //     };
-
-// //     if (status === 'authenticated') {
-// //       handleUserLogin();
-// //     }
-// //   }, [session, status, router]);
-
-// //   if (status === "loading") {
-// //     return <p className="text-center text-white">Loading...</p>;
-// //   }
-
-// //   return (
-// //     <section>
-// //       {/* Grid of Animated Boxes */}
-// //       {Array.from({ length: 625 }).map((_, index) => (
-// //         <span key={index}></span>
-// //       ))}
-
-// //       {/* Sign-in Form */}
-// //       <div className="signin">
-// //         <div className="content">
-// //           <h1 className="text-2xl font-bold text-center text-green-400">USE COLLEGE MAIL ID</h1>
-// //           {session ? (
-// //             <div className="text-center">
-// //               <p className="text-lg text-white">Welcome, {session.user.name}</p>
-// //               <p className="text-sm text-gray-500">{session.user.email}</p>
-// //               <button 
-// //                 onClick={() => signOut()} 
-// //                 className="w-full py-2 mt-4 text-white bg-green-900 rounded hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-green-500"
-// //               >
-// //                 Sign out
-// //               </button>
-// //             </div>
-// //           ) : (
-// //             <div className="space-y-4">
-// //               <button 
-// //                 onClick={() => signIn("google")} 
-// //                 className="w-[200px] py-3 text-black text-xl bg-green-600 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
-// //               >
-// //                 Sign in with Google
-// //               </button>
-// //             </div>
-// //           )}
-// //         </div>
-// //       </div>
-// //     </section>
-// //   );
-// // }
 // 'use client';
 
 // import { useSession, signIn, signOut } from "next-auth/react";
-// import { useEffect } from "react";
+// import { useEffect, useState } from "react";
 // import { useRouter } from "next/navigation";
 // import styles from './Login.module.css'; // Import the CSS module
 
 // export default function Login() {
 //   const { data: session, status } = useSession();
 //   const router = useRouter();
+//   const [error, setError] = useState(null);
 
 //   useEffect(() => {
 //     const handleUserLogin = async () => {
@@ -324,13 +27,31 @@
 
 //           const { isAdmin, redirect } = await response.json();
 
-//           if (isAdmin) {
-//             router.push('/Navbar');
-//           } else {
-//             router.push('/Navbar');
-//           }
+//           // Simulate a delay before redirecting to "access-granted"
+//           setTimeout(() => {
+//             if (isAdmin) {
+//               router.push('/acess-granted');
+//             } else {
+//               router.push('/acess-granted');
+//             }
+
+//             // After a brief delay, redirect back to normal page (e.g., /Navbar)
+//             setTimeout(() => {
+//               router.push('/Navbar'); // Redirect to your normal page
+//             }, 5000); // Delay before redirecting back (2 seconds)
+//           }, 5000); // Delay before showing the "access-granted" page (1 second)
+
 //         } catch (error) {
 //           console.error('Error handling user data:', error);
+//           // If error occurs, redirect to access-denied page
+//           setTimeout(() => {
+//             router.push('/acess-denied');
+//           }, 1000); // Delay before redirecting to access-denied (1 second)
+
+//           // After a brief period, redirect back to normal page (e.g., /Navbar)
+//           setTimeout(() => {
+//             router.push('/Navbar'); // Redirect to your normal page after error
+//           }, 3000); // Delay before redirecting back (3 seconds)
 //         }
 //       }
 //     };
@@ -353,18 +74,7 @@
 //         <div className={styles.signin}>
 //           <div className={styles.content}>
 //             <h1 className={`${styles.header} text-2xl font-bold text-center text-green-400`}>USE COLLEGE MAIL ID</h1>
-//             {session ? (
-//               <div className="text-center">
-//                 <p className="text-lg text-white">Welcome, {session.user.name}</p>
-//                 <p className="text-sm text-gray-500">{session.user.email}</p>
-//                 <button 
-//                   onClick={() => signOut()} 
-//                   className="w-full py-2 mt-4 text-white bg-green-900 rounded hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-green-500"
-//                 >
-//                   Sign out
-//                 </button>
-//               </div>
-//             ) : (
+            
 //               <div className="space-y-4">
 //                 <button 
 //                   onClick={() => signIn("google")} 
@@ -373,7 +83,7 @@
 //                   Sign in with Google
 //                 </button>
 //               </div>
-//             )}
+            
 //           </div>
 //         </div>
 //       </section>
@@ -391,6 +101,7 @@ export default function Login() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [error, setError] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(true); // Track if user login is being processed
 
   useEffect(() => {
     const handleUserLogin = async () => {
@@ -434,15 +145,19 @@ export default function Login() {
             router.push('/Navbar'); // Redirect to your normal page after error
           }, 3000); // Delay before redirecting back (3 seconds)
         }
+      } else {
+        setIsProcessing(false); // If user email is not present, allow sign-in
       }
     };
 
     if (status === 'authenticated') {
       handleUserLogin();
+    } else {
+      setIsProcessing(false); // Allow sign-in button if not authenticated
     }
   }, [session, status, router]);
 
-  if (status === "loading") {
+  if (status === "loading" || isProcessing) {
     return <p className="text-center text-white">Loading...</p>;
   }
 
@@ -456,15 +171,17 @@ export default function Login() {
           <div className={styles.content}>
             <h1 className={`${styles.header} text-2xl font-bold text-center text-green-400`}>USE COLLEGE MAIL ID</h1>
             
-              <div className="space-y-4">
+            <div className="space-y-4">
+              {/* Show sign-in button only if not authenticated and processing is done */}
+              {!session && !isProcessing && (
                 <button 
                   onClick={() => signIn("google")} 
                   className="w-[200px] py-3 text-black text-xl bg-green-600 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
                   Sign in with Google
                 </button>
-              </div>
-            
+              )}
+            </div>
           </div>
         </div>
       </section>
