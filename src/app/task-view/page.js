@@ -168,7 +168,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
 import { ChevronRight, LogOut, Shield, Home, Folder, FileText } from 'lucide-react';
-
+import login from '../login/page'
 const TaskView = () => {
   const [isRequestPageVisible, setRequestPageVisible] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -185,16 +185,32 @@ const TaskView = () => {
     }
     fetchGroups();
   }, [session]);
+  
 
+  // const checkIfUserIsAdmin = async (email) => {
+  //   try {
+  //     const response = await fetch(`/api/check-admin?email=${email}`);
+  //     const data = await response.json();
+  //     setIsAdmin(data.isAdmin);
+  //   } catch (error) {
+  //     console.error('Error checking admin status:', error);
+  //   }
+  // };
   const checkIfUserIsAdmin = async (email) => {
     try {
       const response = await fetch(`/api/check-admin?email=${email}`);
-      const data = await response.json();
+      
+      // Log the response text to check if it's HTML or JSON
+      const text = await response.text();
+      console.log('Response Text:', text);
+  
+      const data = JSON.parse(text);  // Try parsing the response as JSON
       setIsAdmin(data.isAdmin);
     } catch (error) {
       console.error('Error checking admin status:', error);
     }
   };
+  
 
   const fetchGroups = async () => {
     try {
@@ -209,7 +225,7 @@ const TaskView = () => {
   const handleRequestOpen = () => {
     setRequestPageVisible(true);
     setShowMainContent(false);
-    router.push('/task');
+    router.push('/login');
   };
 
   const handleClose = () => {
@@ -247,7 +263,7 @@ const TaskView = () => {
               <span className="ml-2 font-semibold text-gray-900">Task Manager</span>
             </div>
             <div className="flex items-center space-x-4">
-              {isAdmin && !isRequestPageVisible && (
+              
                 <button
                   onClick={handleRequestOpen}
                   className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
@@ -255,7 +271,7 @@ const TaskView = () => {
                   <Shield className="h-4 w-4 mr-2" />
                   Admin Portal
                 </button>
-              )}
+              
               <button
                 onClick={handleSignOut}
                 className="inline-flex items-center px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
