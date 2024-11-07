@@ -21,257 +21,6 @@ const Modal = ({ isOpen, onClose, title, children }) => {
   );
 };
 
-const TaskManager = () => {
-  const [groups, setGroups] = useState([]);
-  const [selectedGroup, setSelectedGroup] = useState(null);
-  const [selectedFolder, setSelectedFolder] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchGroups();
-  }, []);
-
-  const fetchGroups = async () => {
-    try {
-      const response = await fetch('/api/groups');
-      const data = await response.json();
-      setGroups(data);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching groups:', error);
-      setLoading(false);
-    }
-  };
-  const handleDeleteGroup = async (groupId) => {
-    try {
-      const response = await fetch(`/api/groups/${groupId}`, {
-        method: 'DELETE',
-      });
-      if (response.ok) {
-        fetchGroups();
-      }
-    } catch (error) {
-      console.error('Error deleting group:', error);
-    }
-  };
-  
-  const handleDeleteFolder = async (folderId) => {
-    if (!selectedGroup) return;
-    try {
-      const response = await fetch(`/api/folders/${folderId}`, {
-        method: 'DELETE',
-      });
-      if (response.ok) {
-        fetchGroups();
-      }
-    } catch (error) {
-      console.error('Error deleting folder:', error);
-    }
-  };
-  
-  const handleDeleteTask = async (taskId) => {
-    if (!selectedFolder) return;
-    try {
-      const response = await fetch(`/api/tasks/${taskId}`, {
-        method: 'DELETE',
-      });
-      if (response.ok) {
-        fetchGroups();
-      }
-    } catch (error) {
-      console.error('Error deleting task:', error);
-    }
-  };
-  
-  const handleUpdateGroup = async (groupId, name) => {
-    try {
-      const response = await fetch(`/api/groups/${groupId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name }),
-      });
-      if (response.ok) {
-        fetchGroups();
-      }
-    } catch (error) {
-      console.error('Error updating group:', error);
-    }
-  };
-  
-  const handleUpdateFolder = async (folderId, name) => {
-    if (!selectedGroup) return;
-    try {
-      const response = await fetch(`/api/folders/${folderId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name }),
-      });
-      if (response.ok) {
-        fetchGroups();
-      }
-    } catch (error) {
-      console.error('Error updating folder:', error);
-    }
-  };
-  
-  const handleUpdateTask = async (taskId, name, link) => {
-    if (!selectedFolder) return;
-    try {
-      const response = await fetch(`/api/tasks/${taskId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, link }),
-      });
-      if (response.ok) {
-        fetchGroups();
-      }
-    } catch (error) {
-      console.error('Error updating task:', error);
-    }
-  };
-
-  const handleAddGroup = async (name) => {
-    try {
-      const response = await fetch('/api/groups', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name })
-      });
-      if (response.ok) {
-        fetchGroups();
-      }
-    } catch (error) {
-      console.error('Error adding group:', error);
-    }
-  };
-
-  const handleAddFolder = async (name) => {
-    if (!selectedGroup) return;
-    try {
-      const response = await fetch('/api/folders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, groupId: selectedGroup.id })
-      });
-      if (response.ok) {
-        fetchGroups();
-      }
-    } catch (error) {
-      console.error('Error adding folder:', error);
-    }
-  };
-
-  const handleAddTask = async (name, link) => {
-    if (!selectedFolder) return;
-    try {
-      const response = await fetch('/api/tasks', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, link, folderId: selectedFolder.id })
-      });
-      if (response.ok) {
-        fetchGroups();
-      }
-    } catch (error) {
-      console.error('Error adding task:', error);
-    }
-  };
-
-  return (
-    <div className="flex h-screen bg-gray-100 text-gray-800">
-      {/* Sidebar */}
-      <div className="w-64 bg-white shadow-lg text-gray-900">
-        <div className="p-4">
-          <AddItemDialog
-            title="Add Group"
-            onSubmit={handleAddGroup}
-          />
-        </div>
-        <div className="space-y-2">
-          {groups.map(group => (
-            <div
-              key={group.id}
-              className={`p-3 cursor-pointer hover:bg-gray-100 ${
-                selectedGroup?.id === group.id ? 'bg-gray-200' : ''
-              }`}
-              onClick={() => setSelectedGroup(group)}
-            >
-              {group.name}
-            </div>
-          ))}
-         
-
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="flex-1 p-8">
-        {selectedGroup && (
-          <div>
-            <div className="mb-4">
-              <AddItemDialog
-                title="Add Folder"
-                onSubmit={handleAddFolder}
-              />
-            </div>
-            <div className="grid grid-cols-3 gap-4">
-              {selectedGroup.folders?.map(folder => (
-                <div
-                  key={folder.id}
-                  className={`p-4 bg-white rounded-lg shadow cursor-pointer ${
-                    selectedFolder?.id === folder.id ? 'ring-2 ring-blue-500' : ''
-                  }`}
-                  onClick={() => setSelectedFolder(folder)}
-                >
-                  {folder.name}
-                </div>
-              ))}
-              
-
-            </div>
-          </div>
-        )}
-
-        {selectedFolder && (
-          <div className="mt-8">
-            <div className="mb-4">
-              <AddTaskDialog onSubmit={handleAddTask} />
-            </div>
-            <div className="space-y-4">
-              {selectedFolder.tasks?.map(task => (
-                <div
-                  key={task.id}
-                  className="p-4 bg-white rounded-lg shadow flex justify-between items-center"
-                >
-                  <div>
-                    <h3 className="font-medium">{task.name}</h3>
-                    <a
-                      href={task.link}
-                      className="text-blue-500 hover:underline"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      View Link
-                    </a>
-                  </div>
-                  <button
-                    className="text-gray-500 hover:text-red-500"
-                    onClick={() => handleDeleteTask(task.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                </div>
-              ))}
-              
-
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
 const AddItemDialog = ({ title, onSubmit }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState('');
@@ -305,6 +54,7 @@ const AddItemDialog = ({ title, onSubmit }) => {
     </>
   );
 };
+
 const UpdateTaskDialog = ({ task, onUpdate }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState(task?.name || '');
@@ -341,7 +91,6 @@ const UpdateTaskDialog = ({ task, onUpdate }) => {
     </>
   );
 };
-
 
 const AddTaskDialog = ({ onSubmit }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -383,6 +132,266 @@ const AddTaskDialog = ({ onSubmit }) => {
         </form>
       </Modal>
     </>
+  );
+};
+
+const TaskManager = () => {
+  const [groups, setGroups] = useState([]);
+  const [selectedGroup, setSelectedGroup] = useState(null);
+  const [selectedFolder, setSelectedFolder] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchGroups();
+  }, []);
+
+  const fetchGroups = async () => {
+    try {
+      const response = await fetch('/api/groups');
+      const data = await response.json();
+      setGroups(data);
+      
+      // Update selectedGroup with fresh data if one is selected
+      if (selectedGroup) {
+        const updatedSelectedGroup = data.find(group => group.id === selectedGroup.id);
+        setSelectedGroup(updatedSelectedGroup);
+        
+        // Update selectedFolder with fresh data if one is selected
+        if (selectedFolder && updatedSelectedGroup) {
+          const updatedSelectedFolder = updatedSelectedGroup.folders.find(
+            folder => folder.id === selectedFolder.id
+          );
+          setSelectedFolder(updatedSelectedFolder);
+        }
+      }
+      
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching groups:', error);
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteGroup = async (groupId, e) => {
+    e.stopPropagation();
+    if (window.confirm('Are you sure you want to delete this group?')) {
+      try {
+        const response = await fetch(`/api/groups/${groupId}`, {
+          method: 'DELETE',
+        });
+        if (response.ok) {
+          if (selectedGroup?.id === groupId) {
+            setSelectedGroup(null);
+            setSelectedFolder(null);
+          }
+          await fetchGroups();
+        }
+      } catch (error) {
+        console.error('Error deleting group:', error);
+      }
+    }
+  };
+
+  const handleDeleteFolder = async (folderId, e) => {
+    e.stopPropagation();
+    if (window.confirm('Are you sure you want to delete this folder?')) {
+      if (!selectedGroup) return;
+      try {
+        const response = await fetch(`/api/folders/${folderId}`, {
+          method: 'DELETE',
+        });
+        if (response.ok) {
+          if (selectedFolder?.id === folderId) {
+            setSelectedFolder(null);
+          }
+          await fetchGroups();
+        }
+      } catch (error) {
+        console.error('Error deleting folder:', error);
+      }
+    }
+  };
+
+  const handleDeleteTask = async (taskId) => {
+    if (!selectedFolder) return;
+    if (window.confirm('Are you sure you want to delete this task?')) {
+      try {
+        const response = await fetch(`/api/tasks/${taskId}`, {
+          method: 'DELETE',
+        });
+        if (response.ok) {
+          await fetchGroups();
+        }
+      } catch (error) {
+        console.error('Error deleting task:', error);
+      }
+    }
+  };
+
+  const handleAddGroup = async (name) => {
+    try {
+      const response = await fetch('/api/groups', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name })
+      });
+      if (response.ok) {
+        await fetchGroups();
+      }
+    } catch (error) {
+      console.error('Error adding group:', error);
+    }
+  };
+
+  const handleAddFolder = async (name) => {
+    if (!selectedGroup) return;
+    try {
+      const response = await fetch('/api/folders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, groupId: selectedGroup.id })
+      });
+      if (response.ok) {
+        await fetchGroups();
+      }
+    } catch (error) {
+      console.error('Error adding folder:', error);
+    }
+  };
+
+  const handleAddTask = async (name, link) => {
+    if (!selectedFolder) return;
+    try {
+      const response = await fetch('/api/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, link, folderId: selectedFolder.id })
+      });
+      if (response.ok) {
+        await fetchGroups();
+      }
+    } catch (error) {
+      console.error('Error adding task:', error);
+    }
+  };
+
+  const handleUpdateTask = async (taskId, name, link) => {
+    try {
+      const response = await fetch(`/api/tasks/${taskId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, link })
+      });
+      if (response.ok) {
+        await fetchGroups();
+      }
+    } catch (error) {
+      console.error('Error updating task:', error);
+    }
+  };
+
+  return (
+    <div className="flex h-screen bg-gray-100 text-gray-800">
+      {/* Sidebar */}
+      <div className="w-64 bg-white shadow-lg text-gray-900">
+        <div className="p-4">
+          <AddItemDialog
+            title="Add Group"
+            onSubmit={handleAddGroup}
+          />
+        </div>
+        <div className="space-y-2">
+          {groups.map(group => (
+            <div
+              key={group.id}
+              className={`p-3 cursor-pointer hover:bg-gray-100 ${
+                selectedGroup?.id === group.id ? 'bg-gray-200' : ''
+              } flex justify-between items-center`}
+              onClick={() => setSelectedGroup(group)}
+            >
+              <span>{group.name}</span>
+              <button
+                className="text-gray-500 hover:text-red-500"
+                onClick={(e) => handleDeleteGroup(group.id, e)}
+              >
+                <Trash2 className="h-4 w-4" />
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 p-8">
+        {selectedGroup && (
+          <div>
+            <div className="mb-4">
+              <AddItemDialog
+                title="Add Folder"
+                onSubmit={handleAddFolder}
+              />
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              {selectedGroup.folders?.map(folder => (
+                <div
+                  key={folder.id}
+                  className={`p-4 bg-white rounded-lg shadow cursor-pointer ${
+                    selectedFolder?.id === folder.id ? 'ring-2 ring-blue-500' : ''
+                  } flex justify-between items-center`}
+                  onClick={() => setSelectedFolder(folder)}
+                >
+                  <span>{folder.name}</span>
+                  <button
+                    className="text-gray-500 hover:text-red-500"
+                    onClick={(e) => handleDeleteFolder(folder.id, e)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {selectedFolder && (
+          <div className="mt-8">
+            <div className="mb-4">
+              <AddTaskDialog onSubmit={handleAddTask} />
+            </div>
+            <div className="space-y-4">
+              {selectedFolder.tasks?.map(task => (
+                <div
+                  key={task.id}
+                  className="p-4 bg-white rounded-lg shadow flex justify-between items-center"
+                >
+                  <div>
+                    <h3 className="font-medium">{task.name}</h3>
+                    <a
+                      href={task.link}
+                      className="text-blue-500 hover:underline"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View Link
+                    </a>
+                    <UpdateTaskDialog
+                      task={task}
+                      onUpdate={handleUpdateTask}
+                    />
+                  </div>
+                  <button
+                    className="text-gray-500 hover:text-red-500"
+                    onClick={() => handleDeleteTask(task.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 
