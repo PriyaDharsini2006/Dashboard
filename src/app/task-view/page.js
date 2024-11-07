@@ -180,36 +180,12 @@ const TaskView = () => {
   const { data: session } = useSession();
 
   useEffect(() => {
-    if (session?.user?.email) {
-      checkIfUserIsAdmin(session.user.email);
-    }
+    
     fetchGroups();
   }, [session]);
   
 
-  // const checkIfUserIsAdmin = async (email) => {
-  //   try {
-  //     const response = await fetch(`/api/check-admin?email=${email}`);
-  //     const data = await response.json();
-  //     setIsAdmin(data.isAdmin);
-  //   } catch (error) {
-  //     console.error('Error checking admin status:', error);
-  //   }
-  // };
-  const checkIfUserIsAdmin = async (email) => {
-    try {
-      const response = await fetch(`/api/check-admin?email=${email}`);
-      
-      // Log the response text to check if it's HTML or JSON
-      const text = await response.text();
-      console.log('Response Text:', text);
-  
-      const data = JSON.parse(text);  // Try parsing the response as JSON
-      setIsAdmin(data.isAdmin);
-    } catch (error) {
-      console.error('Error checking admin status:', error);
-    }
-  };
+
   
 
   const fetchGroups = async () => {
