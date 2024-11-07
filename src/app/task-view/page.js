@@ -3,18 +3,37 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import AdminRequestPage from '../request/page'; // Ensure the path is correct
+import { signOut, useSession } from 'next-auth/react'; // Import signOut and useSession from next-auth
 
 const TaskView = () => {
   const [isRequestPageVisible, setRequestPageVisible] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false); // State to store admin status
   const router = useRouter();
   const [groups, setGroups] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [selectedFolder, setSelectedFolder] = useState(null);
   const [showMainContent, setShowMainContent] = useState(true); // State to control main content visibility
+  const { data: session } = useSession(); // Get session data from NextAuth
 
   useEffect(() => {
+    if (session?.user?.email) {
+      checkIfUserIsAdmin(session.user.email); // Check if the user is an admin when session is available
+    }
     fetchGroups();
-  }, []);
+  }, [session]); // Re-run when session changes
+
+  // Check if the logged-in user is an admin
+  const checkIfUserIsAdmin = async (email) => {
+    try {
+      const response = await fetch(`/api/check-admin?email=${email}`);
+      const data = await response.json();
+      if (data.isAdmin) {
+        setIsAdmin(true); // User is an admin
+      }
+    } catch (error) {
+      console.error('Error checking admin status:', error);
+    }
+  };
 
   const fetchGroups = async () => {
     try {
@@ -43,9 +62,15 @@ const TaskView = () => {
     router.push('/task-view');
   };
 
+  // Sign out handler
+  const handleSignOut = () => {
+    signOut({ callbackUrl: '/' }); // Redirect to login page after sign-out
+  };
+
   return (
     <>
-      {!isRequestPageVisible ? (
+      {/* Show Admin Portal button only if the user is an admin */}
+      {isAdmin && !isRequestPageVisible && (
         <div
           className="fixed top-4 right-4 bg-green-500 text-white p-4 w-48 rounded-lg shadow-lg cursor-pointer animate-bounce"
           title="Request Admin Access"
@@ -53,9 +78,16 @@ const TaskView = () => {
         >
           <p className="text-center font-semibold">ADMIN PORTAL</p>
         </div>
-      ) : (
-        <AdminRequestPage onClose={handleClose} onSuccess={handleRedirect} />
       )}
+
+      {/* Admin Request Page */}
+      {isRequestPageVisible && <AdminRequestPage onClose={handleClose} onSuccess={handleRedirect} />}
+
+      {/* Sign Out Button */}
+      <div className="fixed top-4 left-4 bg-red-500 text-white p-4 w-48 rounded-lg shadow-lg cursor-pointer animate-bounce" onClick={handleSignOut}>
+        <p className="text-center font-semibold">Sign Out</p>
+      </div>
+
       <div className="p-8">
         {showMainContent && (
           <>
