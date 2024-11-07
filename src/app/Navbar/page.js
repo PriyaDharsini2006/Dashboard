@@ -143,7 +143,7 @@
 // };
 
 // export default Navbar;
-
+'use client'
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -237,8 +237,8 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex flex-col items-center text-center p-10">
-      <div className="text-6xl font-bold mb-8">DASHBOARD</div>
+    <div className="flex flex-col items-center bg-black text-center p-10">
+      <div className="text-6xl text-white font-bold mb-8">DASHBOARD</div>
 
       {/* Countdown Timer */}
       <div className="flex flex-col items-center mb-6">
@@ -298,13 +298,13 @@ const Navbar = () => {
             </div>
           </div>
         </div>
+        {/* <div className='text-black'>space</div>
         <div className='text-black'>space</div>
         <div className='text-black'>space</div>
-        <div className='text-black'>space</div>
-        <div className='text-black'>space</div>
+        <div className='text-black'>space</div> */}
         <div className="text-xl font-redhat ">
           <div className='flex flex-row justify-center space-x-96'>
-            <div className="font-semibold mb-2">REFERENCE</div>
+            <div className="font-semibold text-white mb-2">REFERENCE</div>
             <div></div>
           </div>
           <p className="text-white">Add reference content here.</p>
