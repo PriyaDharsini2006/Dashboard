@@ -12,25 +12,24 @@ export const authOptions = {
   pages: {
     signIn: '/sign',
     signOut: '/logout',
-    error: '/error',
+    error: '/error', // Redirect to a custom error page
   },
   callbacks: {
     async signIn({ user, account, profile }) {
       if (account.provider === "google") {
-        // Additional checks based on Google profile if needed
+        // Allow only users with emails ending in "@citchennai.net"
         if (profile.email.endsWith("@citchennai.net")) {
-          return 'true';  // Allow only users from CIT Chennai
+          return true; // Allow sign-in
         } else {
-          console.log(`Invalid Email ${profile.email}`);
-          return "/acess-denied"; // Redirect to error page if unauthorized
+          console.log(`Unauthorized email: ${profile.email}`);
+          return "/access-denied"; // Redirect to access-denied page if unauthorized
         }
       }
-      return true; // Default to allow sign-in
+      return true; // Default to allow sign-in for other providers if added
     },
     async session({ session, token }) {
-      // Customize session data by adding properties
-      session.user.id = token.sub; // Add user ID to session object
-      session.user.role = "user";  // Set default role (adjust as needed)
+      session.user.id = token.sub;  // Attach user ID to session
+      session.user.role = "user";   // Set a default role, customize if needed
       return session;
     },
     async jwt({ token, account, profile }) {
@@ -43,9 +42,11 @@ export const authOptions = {
   },
   session: {
     strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60, // 30 days
+    maxAge: 30 * 24 * 60 * 60, // Session expiration: 30 days
   },
 };
 
 const handler = NextAuth(authOptions);
+
+// Allow both GET and POST requests to support all NextAuth actions
 export { handler as GET, handler as POST };
