@@ -163,7 +163,7 @@ export default function Login() {
 
   return (
     <div className={styles.pageContainer}>
-      {/* <section className={styles.section}>
+      <section className={styles.section}>
         {Array.from({ length: 625 }).map((_, index) => (
           <span key={index} className={styles.gridBox}></span>
         ))}
@@ -183,7 +183,7 @@ export default function Login() {
             </div>
           </div>
         </div>
-      </section> */}
+      </section>
     </div>
   );
 }
