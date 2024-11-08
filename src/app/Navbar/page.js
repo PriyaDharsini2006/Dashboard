@@ -234,13 +234,13 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex flex-col items-center bg-black text-center p-4 md:p-6 lg:p-10">
-      <div className="text-3xl md:text-4xl lg:text-6xl text-white font-bold mb-4 md:mb-6 lg:mb-8">DASHBOARD</div>
+    <div className="flex flex-col items-center bg-black  text-center p-4 md:p-6 lg:p-10">
+      <div className="text-3xl md:text-4xl lg:text-6xl text-white font-serif font-bold mb-4 md:mb-6 lg:mb-8">DASHBOARD</div>
 
       <div className="flex flex-col items-center mb-4 md:mb-6">
         <div className="flex flex-row p-2 md:p-4">
-          <h1 className="glitch text-3xl md:text-4xl lg:text-5xl font-bold text-teal-400 mr-1">Count</h1>
-          <h1 className="glitch text-3xl md:text-4xl lg:text-5xl font-bold text-red-300">Down</h1>
+          <h1 className="glitch text-3xl md:text-4xl lg:text-5xl font-bold font-serif text-teal-400 mr-1">Count</h1>
+          <h1 className="glitch text-3xl md:text-4xl lg:text-5xl font-bold font-serif text-red-300">Down</h1>
         </div>
 
         <div className="grid grid-cols-2 md:flex md:flex-row gap-2 md:space-x-4 mt-4">
@@ -294,7 +294,7 @@ const Navbar = () => {
         
         <div className="text-base md:text-lg lg:text-xl font-redhat w-full lg:w-auto">
           <div className="text-center lg:text-left mb-2">
-            <div className="font-semibold text-white">REFERENCE</div>
+            <div className="font-bold font-serif text-white">REFERENCE</div>
             <p className="text-white">Add reference content here.</p>
           </div>
         </div>

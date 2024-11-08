@@ -19,7 +19,7 @@ export const authOptions = {
       if (account.provider === "google") {
         // Additional checks based on Google profile if needed
         if (profile.email.endsWith("@citchennai.net")) {
-          return true;  // Allow only users from CIT Chennai
+          return 'true';  // Allow only users from CIT Chennai
         } else {
           console.log(`Invalid Email ${profile.email}`);
           return "/acess-denied"; // Redirect to error page if unauthorized
