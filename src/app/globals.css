@@ -1,6 +1,18 @@
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@font-face {
+  font-family: 'Hacked';
+  src: url('../app/fonts/hacked.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @layer utilities {
   .transform-style-preserve-3d {
     transform-style: preserve-3d;

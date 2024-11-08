@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
+
 const Hyperplexed = ({ onAnimationEnd = () => {} }) => {
   const h1Ref = useRef(null);
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -55,7 +56,7 @@ const Hyperplexed = ({ onAnimationEnd = () => {} }) => {
 
         <h1
           ref={h1Ref}
-          className={`font-redhat text-gradient p-4 md:p-6 lg:p-8 xl:p-12 rounded-lg transition-transform duration-1000 ${
+          className={`font-custom text-gradient p-4 md:p-6 lg:p-8 xl:p-12 rounded-lg transition-transform duration-1000 ${
             isAnimating ? '' : 'animate-zoomOut'
           }`}
           style={{
@@ -66,21 +67,18 @@ const Hyperplexed = ({ onAnimationEnd = () => {} }) => {
             top: '-20px',
             margin: '20px 0',
             position: 'relative',
-            fontFamily: "'Red Hat Display', sans-serif",
           }}
         >
           {originalText}
         </h1>
 
         <style jsx>{`
-          @import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;700&display=swap');
-
           .text-gradient {
             background: white;
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            font-family: 'Red Hat Display', sans-serif;
+            font-family: 'hacked', sans-serif;
           }
 
           @keyframes zoomOut {
@@ -101,7 +99,6 @@ const Hyperplexed = ({ onAnimationEnd = () => {} }) => {
             animation: zoomOut 1.5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
           }
 
-          /* New Styles for Hackerz Container */
           .hackerzContainer {
             display: flex;
             flex-direction: column;

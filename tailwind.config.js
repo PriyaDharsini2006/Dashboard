@@ -13,6 +13,7 @@ module.exports = {
       },
       fontFamily: {
         redhat: ['Red Hat Display', 'sans-serif'],
+        hacked: ['Hacked', 'sans-serif'], 
       },
     },
   },
