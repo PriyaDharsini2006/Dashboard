@@ -127,8 +127,9 @@
 }
 
 .glitchText {
+  font-family: 'hacked', sans-serif;
     color: red;
-    font-size: 3rem;
+    font-size: 7rem;
     font-weight: bold;
     letter-spacing: 2px;
     position: relative;
@@ -140,7 +141,7 @@
 
 .glitchText::before,
 .glitchText::after {
-    /* content: 'ACESS DENIED'; */
+    font-family: 'hacked', sans-serif;
     position:absolute;
     top: 0;
     left: 0;
@@ -151,11 +152,13 @@
 }
 
 .glitchText::before {
+  font-family: 'hacked', sans-serif;
     left: 2px;
     animation: glitchTextLayer 1.5s infinite linear alternate-reverse;
 }
 
 .glitchText::after {
+  font-family: 'hacked', sans-serif;  
     left: -2px;
     animation: glitchTextLayer 1.5s infinite linear alternate;
 }

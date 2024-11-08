@@ -56,11 +56,11 @@ const Hyperplexed = ({ onAnimationEnd = () => {} }) => {
 
         <h1
           ref={h1Ref}
-          className={`font-custom text-gradient p-4 md:p-6 lg:p-8 xl:p-12 rounded-lg transition-transform duration-1000 ${
+          className={`font-hacked text-gradient p-4 md:p-6 lg:p-8 xl:p-12 rounded-lg transition-transform duration-1000 ${
             isAnimating ? '' : 'animate-zoomOut'
           }`}
           style={{
-            fontSize: 'clamp(1rem, 4vw, 6rem)',
+            fontSize: 'clamp(1.5rem, 6vw, 1000px)',
             textAlign: 'center',
             WebkitBackgroundClip: 'text',
             color: 'transparent',
