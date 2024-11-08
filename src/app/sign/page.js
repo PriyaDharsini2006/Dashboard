@@ -163,7 +163,7 @@ export default function Login() {
 
   return (
     <div className={styles.pageContainer}>
-      <section className={styles.section}>
+      {/* <section className={styles.section}>
         {Array.from({ length: 625 }).map((_, index) => (
           <span key={index} className={styles.gridBox}></span>
         ))}
@@ -172,7 +172,6 @@ export default function Login() {
             <h1 className={`${styles.header} text-2xl font-bold text-center text-green-400`}>USE COLLEGE MAIL ID</h1>
             
             <div className="space-y-4">
-              {/* Show sign-in button only if not authenticated and processing is done */}
               {!session && !isProcessing && (
                 <button 
                   onClick={() => signIn("google")} 
@@ -184,7 +183,7 @@ export default function Login() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 }
