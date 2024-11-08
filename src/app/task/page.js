@@ -585,9 +585,7 @@ const TaskManager = () => {
         <div className="p-4 flex justify-between items-center">
 
         <AddItemDialog title="Add Group" onSubmit={handleAddGroup} />
-          <Link href="./task-view" className="px-12 ml-5 py-2 bg-blue-500 mr-[10px] text-white rounded hover:bg-blue-600">
-            Back
-          </Link>
+          
           {/* <AddItemDialog
             title="Add Group"
             onSubmit={handleAddGroup}
@@ -637,13 +635,9 @@ const TaskManager = () => {
                 title="Add Folder"
                 onSubmit={handleAddFolder}
               />
-              <div className="flex-1"></div>
-              <Link
-                href="./task-view"
-                className="px-14 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 ml-5"
-              >
-                Back
-              </Link>
+              <Link href="./task-view" className="px-12 ml-5 py-2 bg-red-500 mr-[10px] text-white rounded hover:bg-blue-600">
+            Back
+          </Link>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {selectedGroup.folders
@@ -688,12 +682,7 @@ const TaskManager = () => {
               <div className='text-black'>space</div>
               <AddTaskDialog onSubmit={handleAddTask} />
               <div className="flex-1"></div>
-              <Link
-                href="./task-view"
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 ml-4"
-              >
-                Back
-              </Link>
+              
             </div>
             <div className="space-y-4">
             {selectedFolder.tasks
