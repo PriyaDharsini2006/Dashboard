@@ -225,8 +225,9 @@
 }
 
 .glitchText {
+  font-family: 'hacked', sans-serif;
   color: rgb(0, 255, 30);
-  font-size: 3rem;
+  font-size: 5rem;
   font-weight: bold;
   font-family: hacked;
   letter-spacing: 2px;
