@@ -19,7 +19,21 @@ const Navbar = () => {
     minutes: 0,
     seconds: 0,
   });
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
+
+  const navLinks = [
+    { name: 'External OD', href: '#', icon: faArrowUpRightFromSquare },
+    { name: 'Internal OD', href: '#', icon: faClipboardList },
+    { name: 'Workspace', href: '#', icon: faCog },
+    { name: 'Database', href: '#', icon: faDatabase },
+  ];
+
+  const nav = [
+    { name: 'Tasks', href: '/task', icon: faListCheck },
+    { name: 'PR Mail', href: '#', icon: faCheckCircle },
+    { name: 'Treasury', href: 'https://hackerz-treasury.vercel.app', icon: faHome },
+  ];
 
   function calculateTimeLeft() {
     const now = new Date();
@@ -27,7 +41,12 @@ const Navbar = () => {
     const difference = targetDate.getTime() - now.getTime();
 
     if (difference < 0) {
-      return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+      return {
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0
+      };
     }
 
     return {
@@ -52,112 +71,77 @@ const Navbar = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const handleNavigation = (href) => {
-    if (href.startsWith('http')) {
-      window.open(href, '_blank');
+  const handleNavigation = (link) => {
+    if (link.name === 'Tasks' && !isAuthenticated) {
+      router.push('/task-view');
     } else {
-      router.push(href);
+      window.open(link.href, '_blank');
     }
   };
 
   return (
-    <div className="relative min-h-screen">
-      {/* Video Background */}
-      <video 
-        autoPlay 
-        muted 
-        loop 
-        playsInline
-        className="absolute top-0 left-0 w-full h-full object-cover z-0"
-      >
-        <source src="/Loading.mp4" type="video/mp4" />
-      </video>
+    <div className="flex flex-col items-center bg-black  text-center p-4 md:p-6 lg:p-10">
+      <div className="text-3xl md:text-4xl lg:text-6xl text-white font-serif font-bold mb-4 md:mb-6 lg:mb-8">DASHBOARD</div>
 
-      {/* Gradient Overlay */}
-      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black/30 to-black/60 z-10"></div>
+      <div className="flex flex-col items-center mb-4 md:mb-6">
+        <div className="flex flex-row p-2 md:p-4">
+          <h1 className="glitch text-3xl md:text-4xl lg:text-5xl font-bold font-serif text-teal-400 mr-1">Count</h1>
+          <h1 className="glitch text-3xl md:text-4xl lg:text-5xl font-bold font-serif text-red-300">Down</h1>
+        </div>
 
-      {/* Main Content */}
-      <div className="relative z-20 flex flex-col items-center min-h-screen">
-        <div className="w-full text-center p-4 md:p-6 lg:p-10">
-          {/* Title with gradient text */}
-          <div className="text-4xl md:text-5xl lg:text-7xl font-bold mb-8 md:mb-12 bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-blue-500">
-            DASHBOARD
-          </div>
-
-          {/* Countdown Timer */}
-          <div className="flex flex-col items-center mb-12 md:mb-16">
-            <div className="flex flex-row p-2 md:p-4 mb-6">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-blue-400">
-                Count Down
-              </h1>
+        <div className="grid grid-cols-2 md:flex md:flex-row gap-2 md:space-x-4 mt-4">
+          {['days', 'hours', 'minutes', 'seconds'].map((unit) => (
+            <div key={unit} className="relative w-24 md:w-32 lg:w-40 h-20 md:h-24 lg:h-28 px-1 md:px-2 perspective">
+              <div className="flip-card-inner">
+                <div className="flip-card-front bg-gray-800 text-teal-300 text-xl md:text-2xl lg:text-3xl font-bold flex justify-center items-center rounded-md">
+                  <span>{String(timeLeft[unit]).padStart(2, '0')}</span>
+                </div>
+                <div className="flip-card-back bg-gray-900 text-teal-300 text-xl md:text-2xl lg:text-3xl font-bold flex justify-center items-center rounded-md rotate-y-180">
+                  <span className="text-sm md:text-base">{unit.charAt(0).toUpperCase() + unit.slice(1)} Left</span>
+                </div>
+              </div>
+              <span className="text-white text-xs md:text-sm font-medium uppercase">{unit}</span>
             </div>
+          ))}
+        </div>
+      </div>
 
-            <div className="grid grid-cols-2 md:flex md:flex-row gap-4 md:gap-6">
-              {['days', 'hours', 'minutes', 'seconds'].map((unit) => (
-                <div key={unit} className="relative group">
-                  <div className="w-28 md:w-36 lg:w-40 h-24 md:h-28 lg:h-32 rounded-xl overflow-hidden backdrop-blur-lg bg-white/10 border border-white/20 shadow-lg transition-all duration-300 hover:scale-105">
-                    <div className="h-full flex flex-col items-center justify-center">
-                      <span className="text-3xl md:text-4xl lg:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-blue-400">
-                        {String(timeLeft[unit]).padStart(2, '0')}
-                      </span>
-                      <span className="text-sm md:text-base text-white/80 mt-2 font-medium uppercase">
-                        {unit}
-                      </span>
-                    </div>
-                  </div>
+      <div className="flex flex-col lg:flex-row w-full justify-center lg:justify-between gap-6">
+        <div className="text-base md:text-lg lg:text-xl pt-4 md:pt-8 lg:pt-12 font-redhat relative">
+          <div className="flex flex-col lg:flex-row gap-6 lg:space-x-6 xl:space-x-20 2xl:space-x-80">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4 md:gap-6 lg:gap-8 xl:gap-24">
+              {navLinks.map((link) => (
+                <div key={link.name} className="relative w-full">
+                  <button
+                    onClick={() => handleNavigation(link)}
+                    className="button w-full text-base md:text-lg lg:text-xl text-white bg-gray-800 transition-colors duration-200 rounded-md p-4 md:p-6 lg:px-16 lg:py-12 xl:px-28 xl:py-24 transform hover:scale-105 active:scale-95 focus:outline-none focus:ring focus:ring-teal-400 flex items-center justify-center"
+                  >
+                    <FontAwesomeIcon icon={link.icon} className="mr-2 w-6 h-6 md:w-8 md:h-8 lg:size-11" />
+                    <span className="whitespace-nowrap">{link.name}</span>
+                  </button>
+                </div>
+              ))}
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4 md:gap-6 lg:gap-8 xl:gap-24">
+              {nav.map((link) => (
+                <div key={link.name} className="relative w-full">
+                  <button
+                    onClick={() => handleNavigation(link)}
+                    className="button w-full text-base md:text-lg lg:text-xl text-white bg-gray-800 transition-colors duration-200 rounded-md p-4 md:p-6 lg:px-16 lg:py-12 xl:px-28 xl:py-24 transform hover:scale-105 active:scale-95 focus:outline-none focus:ring focus:ring-teal-400 flex items-center justify-center"
+                  >
+                    <FontAwesomeIcon icon={link.icon} className="mr-2 w-6 h-6 md:w-8 md:h-8 lg:size-11" />
+                    <span className="whitespace-nowrap">{link.name}</span>
+                  </button>
                 </div>
               ))}
             </div>
           </div>
-
-          {/* Navigation Layout */}
-          <div className="relative mx-auto w-full max-w-4xl h-[700px]">
-            {/* Center Image with glow effect */}
-            <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96">
-              <div className="absolute inset-0 bg-gradient-to-r from-teal-500 to-blue-500 rounded-full blur-2xl opacity-20 animate-pulse"></div>
-              <img
-                src="/NewHackerzWhite.png"
-                alt="Centered Image"
-                className="relative rounded-full object-cover w-full h-full"
-              />
-            </div>
-
-            {/* Navigation Buttons with glassmorphism */}
-            {[
-              { position: 'top-0 left-1/2 transform -translate-x-1/2', icon: faArrowUpRightFromSquare, text: 'External OD', href: '#' },
-              { position: 'top-1/4 right-0', icon: faClipboardList, text: 'Internal OD', href: '#' },
-              { position: 'bottom-1/4 right-0', icon: faCog, text: 'Workspace', href: './task-view' },
-              { position: 'bottom-0 left-1/2 transform -translate-x-1/2', icon: faDatabase, text: 'Database', href: '#' },
-              { position: 'bottom-1/4 left-0', icon: faCheckCircle, text: 'PR Mail', href: '#' },
-              { position: 'top-1/4 left-0', icon: faHome, text: 'Treasury', href: 'https://hackerz-treasury.vercel.app' },
-            ].map((button, index) => (
-              <button
-                key={index}
-                onClick={() => handleNavigation(button.href)}
-                className={`absolute ${button.position} w-48 backdrop-blur-md bg-white/10 border border-white/20 rounded-xl p-4 
-                  transition-all duration-300 hover:scale-105 hover:bg-white/20 hover:border-white/30 
-                  focus:outline-none focus:ring-2 focus:ring-teal-400/50 
-                  group flex items-center justify-center gap-3`}
-              >
-                <FontAwesomeIcon 
-                  icon={button.icon} 
-                  className="w-5 h-5 text-teal-400 group-hover:text-teal-300 transition-colors" 
-                />
-                <span className="text-white/90 group-hover:text-white font-medium">
-                  {button.text}
-                </span>
-              </button>
-            ))}
-          </div>
         </div>
-
-        {/* Reference Section with glassmorphism */}
-        <div className="w-full backdrop-blur-md bg-white/5 border-t border-white/10 mt-auto p-6">
-          <div className="max-w-4xl mx-auto">
-            <div className="font-bold text-2xl bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-blue-400 mb-2">
-              REFERENCE
-            </div>
-            <p className="text-white/80">Add reference content here.</p>
+        
+        <div className="text-base md:text-lg lg:text-xl font-redhat w-full lg:w-auto">
+          <div className="text-center lg:text-left mb-2">
+            <div className="font-bold font-serif text-white">REFERENCE</div>
+            <p className="text-white">Add reference content here.</p>
           </div>
         </div>
       </div>
