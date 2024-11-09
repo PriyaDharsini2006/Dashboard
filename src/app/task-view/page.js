@@ -112,7 +112,7 @@ const TaskView = () => {
       <nav className="bg-gray-800 shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center">
+            <Link href="/Navbar" className="flex items-center">
               <Home className="h-6 w-6 text-gray-400" />
               <span className="ml-2 font-bold font-serif text-gray-200">Task Manager</span>
             </Link>

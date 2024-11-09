@@ -7,6 +7,15 @@ module.exports = {
   ],
   theme: {
     extend: {
+      keyframes: {
+        'border-flow': {
+          '0%': { backgroundPosition: '0% 0' },
+          '100%': { backgroundPosition: '200% 0' },
+        },
+      },
+      animation: {
+        'border-flow': 'border-flow 3s linear infinite',
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",

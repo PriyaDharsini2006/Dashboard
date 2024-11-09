@@ -30,9 +30,9 @@ export default function Login() {
           // Simulate a delay before redirecting to "access-granted"
           setTimeout(() => {
             if (isAdmin) {
-              router.push('/access-granted');
+              router.push('/acess-granted');
             } else {
-              router.push('/access-granted');
+              router.push('/acess-granted');
             }
 
             // After a brief delay, redirect back to normal page (e.g., /Navbar)
