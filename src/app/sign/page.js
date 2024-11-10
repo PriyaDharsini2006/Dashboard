@@ -83,7 +83,7 @@ export default function Login() {
           <div className={styles.content}>
             {session && (
               <h1 className={`${styles.header} text-2xl font-bold text-center text-green-400`}>
-              YOUR SIGN IN IS BEING PROCESSED
+              YOUR SIGN IN IS BEING PROCESSED PLEASE WAIT
             </h1>
             )}
             
