@@ -113,8 +113,8 @@ export default function Login() {
               // After 5 seconds, redirect to the task page
               setTimeout(() => {
                 router.push('/task'); // Redirect to task page
-              }, 5000); // Delay for 5 seconds
-            }, 1000); // Delay to show access-granted page
+              }, 3000); // Delay for 5 seconds
+            }, 3000); // Delay to show access-granted page
           } else {
             // If not admin, redirect to access-denied page immediately
             setTimeout(() => {
@@ -123,8 +123,8 @@ export default function Login() {
               // After 5 seconds, redirect to the task page
               setTimeout(() => {
                 router.push('/task-view'); // Redirect to task page
-              }, 5000); // Delay for 5 seconds
-            }, 1000);
+              }, 3000); // Delay for 5 seconds
+            }, 3000);
           }
         } catch (error) {
           console.error('Error handling user data:', error);

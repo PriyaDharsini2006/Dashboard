@@ -12,6 +12,7 @@ export default function Login() {
   const [isProcessing, setIsProcessing] = useState(true); // Track if user login is being processed
 
   useEffect(() => {
+
     const handleUserLogin = async () => {
       if (session?.user?.email) {
         try {
@@ -38,8 +39,8 @@ export default function Login() {
             // After a brief delay, redirect back to normal page (e.g., /Navbar)
             setTimeout(() => {
               router.push('/Navbar'); // Redirect to your normal page
-            }, 5000); // Delay before redirecting back (5 seconds)
-          }, 5000); // Delay before showing the "access-granted" page (5 seconds)
+            }, 3000); // Delay before redirecting back (5 seconds)
+          }, 3000); // Delay before showing the "access-granted" page (5 seconds)
 
         } catch (error) {
           console.error('Error handling user data:', error);
@@ -53,7 +54,7 @@ export default function Login() {
           // After a brief period, redirect back to normal page (e.g., /Navbar)
           setTimeout(() => {
             router.push('/Navbar'); // Redirect to your normal page after error
-          }, 3000); // Delay before redirecting back (3 seconds)
+          }, 1000); // Delay before redirecting back (3 seconds)
         }
       } else {
         setIsProcessing(false); // If user email is not present, allow sign-in
@@ -61,6 +62,7 @@ export default function Login() {
     };
 
     if (status === 'authenticated') {
+
       handleUserLogin();
     } else {
       setIsProcessing(false); // Allow sign-in button if not authenticated
@@ -79,18 +81,25 @@ export default function Login() {
         ))}
         <div className={styles.signin}>
           <div className={styles.content}>
-            <h1 className={`${styles.header} text-2xl font-bold text-center text-green-400`}>
-              USE COLLEGE MAIL ID
+            {session && (
+              <h1 className={`${styles.header} text-2xl font-bold text-center text-green-400`}>
+              YOUR SIGN IN IS BEING PROCESSED
             </h1>
+            )}
             
-            <div className="space-y-4">
+            <div className="space-y-4 text-center">
               {!session && !isProcessing && (
+                <>
+                <h1 className={`${styles.header} text-2xl font-bold text-center text-green-400`}>
+                USE COLLEGE MAIL ID
+              </h1>
                 <button 
                   onClick={() => signIn("google", { callbackUrl: "/Navbar" })} 
                   className="w-[200px] py-3 text-black text-xl bg-green-600 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
                   Sign in with Google
                 </button>
+                </>
               )}
               {error && <p className="text-red-500 text-center">{error}</p>}
             </div>
