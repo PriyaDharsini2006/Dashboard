@@ -81,7 +81,7 @@ const TaskView = () => {
   const handleRequestOpen = () => {
     setRequestPageVisible(true);
     setShowMainContent(false);
-    router.push('/login');
+    router.push('/task');
   };
 
   const handleSignOut = async () => {
