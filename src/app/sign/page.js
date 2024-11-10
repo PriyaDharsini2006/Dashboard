@@ -4,7 +4,6 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from './Login.module.css'; // Import the CSS module
-
 export default function Login() {
   const { data: session, status } = useSession();
   const router = useRouter();
