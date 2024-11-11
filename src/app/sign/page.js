@@ -52,6 +52,7 @@ export default function Login() {
 
           // After a brief period, redirect back to normal page (e.g., /Navbar)
           setTimeout(() => {
+            
             router.push('/Navbar'); // Redirect to your normal page after error
           }, 1000); // Delay before redirecting back (3 seconds)
         }
