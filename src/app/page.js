@@ -17,7 +17,7 @@ const Page = () => {
         className={`transition-opacity duration-1000 
           ${showContent ? 'opacity-100' : 'opacity-0'}`}
       >
-        <Navbar />
+        <Login />
         <h1 className='text-white text-center font-redhat text-4xl'>
         </h1>
       </div>
