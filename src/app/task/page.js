@@ -721,14 +721,15 @@ const TaskManager = () => {
                         <div className="flex items-center space-x-2">
                           <UpdateFolderDialog folder={folder} onUpdate={handleUpdateFolder} />
                           <button
-                            className="p-1 hover:bg-gray-600 rounded"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleDeleteFolder(folder.id);
-                            }}
-                          >
-                            <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-500" />
-                          </button>
+  className="p-1 hover:bg-gray-600 rounded"
+  onClick={(e) => {
+    e.stopPropagation();
+    handleDeleteFolder(folder.id, e); // Pass `e` as the second argument
+  }}
+>
+  <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-500" />
+</button>
+
                         </div>
                       </div>
                     </div>
