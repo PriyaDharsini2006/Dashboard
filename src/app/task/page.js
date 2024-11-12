@@ -174,7 +174,6 @@ const UpdateTaskDialog = ({ task, onUpdate }) => {
     </>
   );
 };
-
 const AddTaskDialog = ({ onSubmit }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState('');
