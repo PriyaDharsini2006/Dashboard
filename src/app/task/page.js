@@ -611,7 +611,7 @@ const TaskManager = () => {
           <ChevronLeft />
         </Link>
       </div>
-  
+
       {/* Sidebar Overlay */}
       {isSidebarOpen && (
         <div
@@ -620,7 +620,7 @@ const TaskManager = () => {
           aria-label="Close sidebar overlay"
         />
       )}
-  
+
       <div className="flex flex-col lg:flex-row h-[calc(100vh-4rem)] lg:h-screen">
         {/* Sidebar */}
         <div className={` 
@@ -640,7 +640,7 @@ const TaskManager = () => {
               <X className="h-5 w-5" />
             </button>
           </div>
-  
+
           <div className="p-4 space-y-4">
             <input
               type="text"
@@ -649,7 +649,7 @@ const TaskManager = () => {
               onChange={handleSearch}
               className="w-full px-4 py-2 bg-gray-700 rounded-lg text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-  
+
             <div className="flex justify-between items-center">
               <AddItemDialog title="Add Group" onSubmit={handleAddGroup} />
               <Link href="./task-view" className="px-4 py-2 ml-[5px] bg-blue-500 rounded-lg hover:bg-blue-600">
@@ -657,7 +657,7 @@ const TaskManager = () => {
               </Link>
             </div>
           </div>
-  
+
           <div className="flex-1 overflow-y-auto px-4 py-2 space-y-2">
             {filteredGroups?.map(group => (
               <div
@@ -679,7 +679,7 @@ const TaskManager = () => {
                     className="p-1 hover:bg-gray-600 rounded"
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleDeleteGroup(group.id);
+                      handleDeleteGroup(group.id, e); // Pass both group.id and the event
                     }}
                   >
                     <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-500" />
@@ -689,7 +689,7 @@ const TaskManager = () => {
             ))}
           </div>
         </div>
-  
+
         {/* Main Content */}
         <div className="flex-1 p-4 lg:p-8 overflow-y-auto">
           {selectedGroup && (
@@ -704,7 +704,7 @@ const TaskManager = () => {
                 />
                 <AddItemDialog title="Add Folder" onSubmit={handleAddFolder} />
               </div>
-  
+
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {selectedGroup.folders
                   ?.filter(folder => folder.name.toLowerCase().includes(folderSearchTerm.toLowerCase()))
@@ -736,7 +736,7 @@ const TaskManager = () => {
               </div>
             </div>
           )}
-  
+
           {selectedGroup && selectedFolder && (
             <div className="mt-8 space-y-6">
               {/* Task search and list */}
@@ -750,7 +750,7 @@ const TaskManager = () => {
                 />
                 <AddTaskDialog onSubmit={handleAddTask} />
               </div>
-  
+
               <div className="space-y-4">
                 {selectedFolder.tasks
                   ?.filter(task => task.name.toLowerCase().includes(taskSearchTerm.toLowerCase()))
