@@ -3,19 +3,20 @@
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import styles from './Login.module.css'; // Import the CSS module
+import styles from './Login.module.css';
+
 export default function Login() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [error, setError] = useState(null);
-  const [isProcessing, setIsProcessing] = useState(true); // Track if user login is being processed
+  const [isProcessing, setIsProcessing] = useState(true);
 
   useEffect(() => {
-
     const handleUserLogin = async () => {
       if (session?.user?.email) {
         try {
-          const response = await fetch('/api/check-user', {
+          // First, check user and get admin status
+          const checkUserResponse = await fetch('/api/check-user', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -25,9 +26,24 @@ export default function Login() {
             }),
           });
 
-          const { isAdmin, redirect } = await response.json();
+          const { isAdmin, redirect } = await checkUserResponse.json();
 
-          // Simulate a delay before redirecting to "access-granted"
+          // Update login count
+          const updateCountResponse = await fetch('/api/update-login-count', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: session.user.email,
+            }),
+          });
+
+          if (!updateCountResponse.ok) {
+            console.error('Failed to update login count');
+          }
+
+          // Continue with existing redirect logic
           setTimeout(() => {
             if (isAdmin) {
               router.push('/acess-granted');
@@ -35,37 +51,32 @@ export default function Login() {
               router.push('/acess-granted');
             }
 
-            // After a brief delay, redirect back to normal page (e.g., /Navbar)
             setTimeout(() => {
-              router.push('/Navbar'); // Redirect to your normal page
-            }, 3000); // Delay before redirecting back (5 seconds)
-          }, 3000); // Delay before showing the "access-granted" page (5 seconds)
+              router.push('/Navbar');
+            }, 3000);
+          }, 3000);
 
         } catch (error) {
           console.error('Error handling user data:', error);
           setError('An error occurred while processing your request.');
           
-          // If error occurs, redirect to access-denied page
           setTimeout(() => {
             router.push('/access-denied');
-          }, 1000); // Delay before redirecting to access-denied (1 second)
+          }, 1000);
 
-          // After a brief period, redirect back to normal page (e.g., /Navbar)
           setTimeout(() => {
-            
-            router.push('/Navbar'); // Redirect to your normal page after error
-          }, 1000); // Delay before redirecting back (3 seconds)
+            router.push('/Navbar');
+          }, 1000);
         }
       } else {
-        setIsProcessing(false); // If user email is not present, allow sign-in
+        setIsProcessing(false);
       }
     };
 
     if (status === 'authenticated') {
-
       handleUserLogin();
     } else {
-      setIsProcessing(false); // Allow sign-in button if not authenticated
+      setIsProcessing(false);
     }
   }, [session, status, router]);
 
@@ -83,22 +94,22 @@ export default function Login() {
           <div className={styles.content}>
             {session && (
               <h1 className={`${styles.header} text-2xl font-bold text-center text-green-400`}>
-              YOUR SIGN IN IS BEING PROCESSED PLEASE WAIT
-            </h1>
+                YOUR SIGN IN IS BEING PROCESSED PLEASE WAIT
+              </h1>
             )}
             
             <div className="space-y-4 text-center">
               {!session && !isProcessing && (
                 <>
-                <h1 className={`${styles.header} text-2xl font-bold text-center text-green-400`}>
-                USE COLLEGE MAIL ID
-              </h1>
-                <button 
-                  onClick={() => signIn("google", { callbackUrl: "/Navbar" })} 
-                  className="w-[200px] py-3 text-black text-xl bg-green-600 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
-                >
-                  Sign in with Google
-                </button>
+                  <h1 className={`${styles.header} text-2xl font-bold text-center text-green-400`}>
+                    USE COLLEGE MAIL ID
+                  </h1>
+                  <button 
+                    onClick={() => signIn("google", { callbackUrl: "/Navbar" })} 
+                    className="w-[200px] py-3 text-black text-xl bg-green-600 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  >
+                    Sign in with Google
+                  </button>
                 </>
               )}
               {error && <p className="text-red-500 text-center">{error}</p>}
