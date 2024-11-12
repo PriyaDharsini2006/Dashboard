@@ -3,9 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { PlusCircle, Trash2, X, Menu, ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useSession} from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 const Modal = ({ isOpen, onClose, title, children }) => {
-  
+
   if (!isOpen) return null;
 
   return (
@@ -558,13 +558,13 @@ const TaskManager = () => {
       await fetchGroups();
     }
   };
-  
+
   const [filteredGroups, setFilteredGroups] = useState([]);
   const [folderSearchTerm, setFolderSearchTerm] = useState('');
   const [taskSearchTerm, setTaskSearchTerm] = useState('');
 
   const [searchTerm, setSearchTerm] = useState('');
-  
+
 
   useEffect(() => {
     fetchGroups();
@@ -600,7 +600,7 @@ const TaskManager = () => {
     <div className="min-h-screen bg-gray-900 text-gray-200">
       {/* Mobile Header */}
       <div className="lg:hidden flex items-center justify-between p-4 bg-gray-800">
-        <button 
+        <button
           onClick={toggleSidebar}
           className="p-2 hover:bg-gray-700 rounded-lg"
           aria-label={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
@@ -612,20 +612,19 @@ const TaskManager = () => {
           <ChevronLeft />
         </Link>
       </div>
-
+  
       {/* Sidebar Overlay */}
       {isSidebarOpen && (
-        <div 
+        <div
           className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-10"
           onClick={closeSidebar}
           aria-label="Close sidebar overlay"
         />
-        
       )}
-
+  
       <div className="flex flex-col lg:flex-row h-[calc(100vh-4rem)] lg:h-screen">
         {/* Sidebar */}
-        <div className={`
+        <div className={` 
           fixed lg:static inset-0 z-20 bg-gray-800
           transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
           lg:transform-none transition-transform duration-200 ease-in-out
@@ -642,7 +641,7 @@ const TaskManager = () => {
               <X className="h-5 w-5" />
             </button>
           </div>
-
+  
           <div className="p-4 space-y-4">
             <input
               type="text"
@@ -651,7 +650,7 @@ const TaskManager = () => {
               onChange={handleSearch}
               className="w-full px-4 py-2 bg-gray-700 rounded-lg text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            
+  
             <div className="flex justify-between items-center">
               <AddItemDialog title="Add Group" onSubmit={handleAddGroup} />
               <Link href="./task-view" className="px-4 py-2 ml-[5px] bg-blue-500 rounded-lg hover:bg-blue-600">
@@ -659,17 +658,19 @@ const TaskManager = () => {
               </Link>
             </div>
           </div>
-
+  
           <div className="flex-1 overflow-y-auto px-4 py-2 space-y-2">
             {filteredGroups?.map(group => (
               <div
                 key={group.id}
                 className={`p-3 rounded-lg cursor-pointer hover:bg-gray-700 
-                  ${selectedGroup?.id === group.id ? 'bg-gray-600' : ''}
+                  ${selectedGroup?.id === group.id ? 'bg-gray-600' : ''} 
                   flex justify-between items-center`}
                 onClick={() => {
-                  setSelectedGroup(group);
-                  setIsSidebarOpen(false);
+                  setSelectedGroup(group);           // Set the selected group
+                  setSelectedFolder(null);            // Reset folder to null when switching groups
+                  setTaskSearchTerm('');              // Reset task search term when switching groups
+                  setIsSidebarOpen(false);            // Close sidebar
                 }}
               >
                 <span className="truncate">{group.name}</span>
@@ -689,7 +690,7 @@ const TaskManager = () => {
             ))}
           </div>
         </div>
-
+  
         {/* Main Content */}
         <div className="flex-1 p-4 lg:p-8 overflow-y-auto">
           {selectedGroup && (
@@ -704,7 +705,7 @@ const TaskManager = () => {
                 />
                 <AddItemDialog title="Add Folder" onSubmit={handleAddFolder} />
               </div>
-
+  
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {selectedGroup.folders
                   ?.filter(folder => folder.name.toLowerCase().includes(folderSearchTerm.toLowerCase()))
@@ -721,15 +722,14 @@ const TaskManager = () => {
                         <div className="flex items-center space-x-2">
                           <UpdateFolderDialog folder={folder} onUpdate={handleUpdateFolder} />
                           <button
-  className="p-1 hover:bg-gray-600 rounded"
-  onClick={(e) => {
-    e.stopPropagation();
-    handleDeleteFolder(folder.id, e); // Pass `e` as the second argument
-  }}
->
-  <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-500" />
-</button>
-
+                            className="p-1 hover:bg-gray-600 rounded"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteFolder(folder.id, e); // Pass `e` as the second argument
+                            }}
+                          >
+                            <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-500" />
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -737,9 +737,10 @@ const TaskManager = () => {
               </div>
             </div>
           )}
-
+  
           {selectedGroup && selectedFolder && (
             <div className="mt-8 space-y-6">
+              {/* Task search and list */}
               <div className="flex flex-col sm:flex-row gap-4 items-center">
                 <input
                   type="text"
@@ -750,7 +751,7 @@ const TaskManager = () => {
                 />
                 <AddTaskDialog onSubmit={handleAddTask} />
               </div>
-
+  
               <div className="space-y-4">
                 {selectedFolder.tasks
                   ?.filter(task => task.name.toLowerCase().includes(taskSearchTerm.toLowerCase()))
@@ -790,8 +791,7 @@ const TaskManager = () => {
       </div>
     </div>
   );
-};
-
+}
 export default TaskManager;
 
 
