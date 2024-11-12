@@ -2,8 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import { PlusCircle, Trash2, X, Menu, ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
-
+import { useRouter } from 'next/navigation';
+import { useSession} from 'next-auth/react';
 const Modal = ({ isOpen, onClose, title, children }) => {
+  
   if (!isOpen) return null;
 
   return (
@@ -217,13 +219,32 @@ const AddTaskDialog = ({ onSubmit }) => {
 };
 
 const TaskManager = () => {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [groups, setGroups] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [selectedFolder, setSelectedFolder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
   useEffect(() => {
+    if (status === 'loading') return; // Wait for session check
+
+    if (!session) {
+      router.replace('/sign'); // Redirect to sign-in if no session
+      return;
+    }
+
+    // Check for authorized email domain
+    if (!session.user?.email?.endsWith('@citchennai.net')) {
+      router.replace('/sign');
+      return;
+    }
+
+    // If authenticated, fetch groups
+    fetchGroups();
+  }, [session, status, router]);
+  useEffect(() => {
+
     fetchGroups();
   }, []);
 
