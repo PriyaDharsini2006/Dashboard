@@ -1,14 +1,14 @@
-'use client'
+'use client';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faClipboardList, 
-  faCog, 
-  faDatabase, 
-  faArrowUpRightFromSquare, 
-  faListCheck, 
+import {
+  faClipboardList,
+  faCog,
+  faDatabase,
+  faArrowUpRightFromSquare,
+  faListCheck,
   faCheckCircle,
   faHome,
 } from '@fortawesome/free-solid-svg-icons';
@@ -20,8 +20,43 @@ const Navbar = () => {
     minutes: 0,
     seconds: 0,
   });
+  const [totalTraffic, setTotalTraffic] = useState(null);
+  const [fetchError, setFetchError] = useState(null);  // Added error state
   const router = useRouter();
   const { data: session, status } = useSession();
+
+  // Fetch the total traffic count from the API
+  useEffect(() => {
+    async function fetchTrafficCount() {
+      try {
+        setFetchError(null); // Reset error state before fetching
+        const response = await fetch('/api/trafficCount');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (data.error) {
+          throw new Error(data.error);
+        }
+        
+        setTotalTraffic(data.totalCount);
+      } catch (error) {
+        console.error('Error fetching traffic count:', error);
+        setFetchError('Failed to load traffic count');
+        setTotalTraffic(null);
+      }
+    }
+
+    fetchTrafficCount();
+    
+    // Add polling to keep count updated
+    const intervalId = setInterval(fetchTrafficCount, 30000); // Update every 30 seconds
+    
+    return () => clearInterval(intervalId); // Cleanup on unmount
+  }, []);
 
   const navLinks = [
     { name: 'External OD', href: '#', icon: faArrowUpRightFromSquare },
@@ -82,13 +117,13 @@ const Navbar = () => {
       if (status === 'loading') {
         return; // Wait for session check to complete
       }
-      
+
       if (!session) {
         // Redirect to sign-in if not authenticated
         router.push('/sign');
         return;
       }
-      
+
       // Check if email domain is authorized
       if (!session.user?.email?.endsWith('@citchennai.net')) {
         router.push('/access-denied');
@@ -103,19 +138,32 @@ const Navbar = () => {
       router.push(link.href);
     }
   };
+  const renderTrafficCount = () => (
+    <div className="text-white text-lg md:text-xl lg:text-2xl font-bold mb-4">
+      Total Traffic Count:{' '}
+      {fetchError ? (
+        <span className="text-red-500 text-base">{fetchError}</span>
+      ) : totalTraffic !== null ? (
+        totalTraffic.toLocaleString()
+      ) : (
+        <span className="animate-pulse">Loading...</span>
+      )}
+    </div>
+  );
+  // Rest of your countdown and navigation code remains the same...
 
   return (
     <div className="flex flex-col items-center bg-black text-center p-4 md:p-6 lg:p-10">
-             <div className="text-3xl md:text-4xl lg:text-6xl text-white font-serif font-bold mb-4 md:mb-6 lg:mb-8">DASHBOARD</div>
-
+      <div className="text-3xl md:text-4xl lg:text-6xl text-white font-serif font-bold mb-4 md:mb-6 lg:mb-8">DASHBOARD</div>
+      {renderTrafficCount()}
       <div className="flex flex-col items-center mb-4 md:mb-6">
-         <div className="flex flex-row p-2 md:p-4">
-           <h1 className="glitch text-3xl md:text-4xl lg:text-5xl font-bold font-serif text-teal-400 mr-1">Count</h1>
+        <div className="flex flex-row p-2 md:p-4">
+          <h1 className="glitch text-3xl md:text-4xl lg:text-5xl font-bold font-serif text-teal-400 mr-1">Count</h1>
           <h1 className="glitch text-3xl md:text-4xl lg:text-5xl font-bold font-serif text-red-300">Down</h1>
-         </div>
+        </div>
 
-         <div className="grid grid-cols-2 md:flex md:flex-row gap-2 md:space-x-4 mt-4">
-           {['days', 'hours', 'minutes', 'seconds'].map((unit) => (
+        <div className="grid grid-cols-2 md:flex md:flex-row gap-2 md:space-x-4 mt-4">
+          {['days', 'hours', 'minutes', 'seconds'].map((unit) => (
             <div key={unit} className="relative w-24 md:w-32 lg:w-40 h-20 md:h-24 lg:h-28 px-1 md:px-2 perspective">
               <div className="flip-card-inner">
                 <div className="flip-card-front bg-gray-800 text-teal-300 text-xl md:text-2xl lg:text-3xl font-bold flex justify-center items-center rounded-md">
@@ -131,7 +179,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      
+
       {/* Rest of your JSX remains the same until the button onClick handlers */}
       <div className="flex flex-col lg:flex-row w-full justify-center lg:justify-between gap-6">
         <div className="text-base md:text-lg lg:text-xl pt-4 md:pt-8 lg:pt-12 font-redhat relative">
@@ -164,7 +212,7 @@ const Navbar = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="text-base md:text-lg lg:text-xl font-redhat w-full lg:w-auto">
           <div className="text-center lg:text-left mb-2">
             <div className="font-bold font-serif text-white">REFERENCE</div>
@@ -172,6 +220,7 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+      {/* Rest of your JSX remains the same... */}
     </div>
   );
 };
