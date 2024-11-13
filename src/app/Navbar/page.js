@@ -21,15 +21,50 @@ const Navbar = () => {
     seconds: 0,
   });
   const [totalTraffic, setTotalTraffic] = useState(null);
-  const [fetchError, setFetchError] = useState(null);  // Added error state
+  const [fetchError, setFetchError] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const router = useRouter();
   const { data: session, status } = useSession();
 
   // Fetch the total traffic count from the API
   useEffect(() => {
+    async function checkAdminStatus() {
+      if (session?.user?.email) {
+        try {
+          const response = await fetch('/api/checkAdmin', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: session.user.email
+            })
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to check admin status');
+          }
+
+          const data = await response.json();
+          setIsAdmin(data.isAdmin);
+        } catch (error) {
+          console.error('Error checking admin status:', error);
+          setIsAdmin(false);
+        }
+      }
+    }
+
+    checkAdminStatus();
+  }, [session]);
+
+   useEffect(() => {
     async function fetchTrafficCount() {
+      if (!isAdmin) {
+        return;
+      }
+
       try {
-        setFetchError(null); // Reset error state before fetching
+        setFetchError(null);
         const response = await fetch('/api/trafficCount');
         
         if (!response.ok) {
@@ -50,13 +85,33 @@ const Navbar = () => {
       }
     }
 
-    fetchTrafficCount();
-    
-    // Add polling to keep count updated
-    const intervalId = setInterval(fetchTrafficCount, 30000); // Update every 30 seconds
-    
-    return () => clearInterval(intervalId); // Cleanup on unmount
-  }, []);
+    if (isAdmin) {
+      fetchTrafficCount();
+      const intervalId = setInterval(fetchTrafficCount, 30000);
+      return () => clearInterval(intervalId);
+    }
+  }, [isAdmin]);
+
+  // Rest of your existing code remains the same...
+
+  const renderTrafficCount = () => {
+    if (!isAdmin) {
+      return null; // Don't render anything if user is not admin
+    }
+
+    return (
+      <div className="text-white text-lg md:text-xl lg:text-2xl font-bold mb-4">
+        Total Traffic Count:{' '}
+        {fetchError ? (
+          <span className="text-red-500 text-base">{fetchError}</span>
+        ) : totalTraffic !== null ? (
+          totalTraffic.toLocaleString()
+        ) : (
+          <span className="animate-pulse">Loading...</span>
+        )}
+      </div>
+    );
+  };
 
   const navLinks = [
     { name: 'External OD', href: '#', icon: faArrowUpRightFromSquare },
@@ -138,18 +193,6 @@ const Navbar = () => {
       router.push(link.href);
     }
   };
-  const renderTrafficCount = () => (
-    <div className="text-white text-lg md:text-xl lg:text-2xl font-bold mb-4">
-      Total Traffic Count:{' '}
-      {fetchError ? (
-        <span className="text-red-500 text-base">{fetchError}</span>
-      ) : totalTraffic !== null ? (
-        totalTraffic.toLocaleString()
-      ) : (
-        <span className="animate-pulse">Loading...</span>
-      )}
-    </div>
-  );
   // Rest of your countdown and navigation code remains the same...
 
   return (
