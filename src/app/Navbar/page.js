@@ -10,6 +10,7 @@ import {
   faArrowUpRightFromSquare,
   faListCheck,
   faCheckCircle,
+  faUsers,
   faHome,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -92,11 +93,9 @@ const Navbar = () => {
     }
   }, [isAdmin]);
 
-  // Rest of your existing code remains the same...
-
   const renderTrafficCount = () => {
     if (!isAdmin) {
-      return null; // Don't render anything if user is not admin
+      return null;
     }
 
     return (
@@ -115,14 +114,13 @@ const Navbar = () => {
 
   const navLinks = [
     { name: 'External OD', href: '#', icon: faArrowUpRightFromSquare },
-    { name: 'Internal OD', href: '#', icon: faClipboardList },
-    { name: 'Workspace', href: '#', icon: faCog },
-    { name: 'Database', href: '#', icon: faDatabase },
+    { name: 'Internal OD', href: 'https://internal-od.vercel.app/', icon: faClipboardList },
+    { name: 'Stayback', href: '/stayback', icon: faUsers },
   ];
 
   const nav = [
-    { name: 'Tasks', href: '/task-view', icon: faListCheck, requiresAuth: true },
-    { name: 'PR Mail', href: '#', icon: faCheckCircle },
+    { name: 'Tasks & Workspace', href: '/task-view', icon: faListCheck, requiresAuth: true },
+    { name: 'PR Mail', href: 'https://hackerz-mail-automation.vercel.app', icon: faCheckCircle },
     { name: 'Treasury', href: 'https://hackerz-treasury.vercel.app', icon: faHome },
   ];
 
@@ -150,7 +148,6 @@ const Navbar = () => {
 
   useEffect(() => {
     if (!session) {
-      // Redirect to sign-in if not authenticated
       router.push('/sign');
       return;
     }
@@ -170,30 +167,26 @@ const Navbar = () => {
   const handleNavigation = (link) => {
     if (link.requiresAuth) {
       if (status === 'loading') {
-        return; // Wait for session check to complete
+        return;
       }
 
       if (!session) {
-        // Redirect to sign-in if not authenticated
         router.push('/sign');
         return;
       }
 
-      // Check if email domain is authorized
       if (!session.user?.email?.endsWith('@citchennai.net')) {
         router.push('/access-denied');
         return;
       }
     }
 
-    // Handle navigation based on href type
     if (link.href.startsWith('http')) {
       window.open(link.href, '_blank');
     } else {
       router.push(link.href);
     }
   };
-  // Rest of your countdown and navigation code remains the same...
 
   return (
     <div className="flex flex-col items-center bg-black text-center p-4 md:p-6 lg:p-10">
@@ -222,8 +215,6 @@ const Navbar = () => {
         </div>
       </div>
 
-
-      {/* Rest of your JSX remains the same until the button onClick handlers */}
       <div className="flex flex-col lg:flex-row w-full justify-center lg:justify-between gap-6">
         <div className="text-base md:text-lg lg:text-xl pt-4 md:pt-8 lg:pt-12 font-redhat relative">
           <div className="flex flex-col lg:flex-row gap-6 lg:space-x-6 xl:space-x-20 2xl:space-x-80">
@@ -263,7 +254,6 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-      {/* Rest of your JSX remains the same... */}
     </div>
   );
 };
