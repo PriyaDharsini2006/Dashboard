@@ -1,5 +1,4 @@
-
- 'use client'
+'use client'
 
 import React, { useEffect } from 'react';
 import styles from './AccessDenied.module.css';
@@ -21,7 +20,7 @@ export default function AccessDenied() {
       context.fillStyle = 'rgba(0, 0, 0, 0.05)';
       context.fillRect(0, 0, canvas.width, canvas.height);
 
-      context.fillStyle = '#0f0'; // Green text
+      context.fillStyle = '#00f5d0'; // Updated matrix color
       context.font = `${fontSize}px monospace`;
 
       drops.forEach((y, x) => {
