@@ -3,10 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Clock, ChevronRight } from 'lucide-react';
 import {
   faClipboardList,
-  faCog,
-  faDatabase,
   faArrowUpRightFromSquare,
   faListCheck,
   faCheckCircle,
@@ -189,69 +188,66 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex flex-col items-center bg-black text-center p-4 md:p-6 lg:p-10">
-      <div className="text-3xl md:text-4xl lg:text-6xl text-white font-serif font-bold mb-4 md:mb-6 lg:mb-8">DASHBOARD</div>
-      {renderTrafficCount()}
-      <div className="flex flex-col items-center mb-4 md:mb-6">
-        <div className="flex flex-row p-2 md:p-4">
-          <h1 className="glitch text-3xl md:text-4xl lg:text-5xl font-bold font-serif text-teal-400 mr-1">Count</h1>
-          <h1 className="glitch text-3xl md:text-4xl lg:text-5xl font-bold font-serif text-red-300">Down</h1>
-        </div>
-
-        <div className="grid grid-cols-2 md:flex md:flex-row gap-2 md:space-x-4 mt-4">
-          {['days', 'hours', 'minutes', 'seconds'].map((unit) => (
-            <div key={unit} className="relative w-24 md:w-32 lg:w-40 h-20 md:h-24 lg:h-28 px-1 md:px-2 perspective">
-              <div className="flip-card-inner">
-                <div className="flip-card-front bg-gray-800 text-teal-300 text-xl md:text-2xl lg:text-3xl font-bold flex justify-center items-center rounded-md">
-                  <span>{String(timeLeft[unit]).padStart(2, '0')}</span>
-                </div>
-                <div className="flip-card-back bg-gray-900 text-teal-300 text-xl md:text-2xl lg:text-3xl font-bold flex justify-center items-center rounded-md rotate-y-180">
-                  <span className="text-sm md:text-base">{unit.charAt(0).toUpperCase() + unit.slice(1)} Left</span>
-                </div>
-              </div>
-              <span className="text-white text-xs md:text-sm font-medium uppercase">{unit}</span>
-            </div>
-          ))}
+    <div className="min-h-screen bg-black text-gray-300">
+      {/* Header Section */}
+      <div className="w-full backdrop-blur-xl border-b border-white/10 p-6">
+        <div className="max-w-7xl mx-auto">
+          <h1 className="text-8xl font-hacked font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+            DASHBOARD
+          </h1>
+          {renderTrafficCount && renderTrafficCount()}
         </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row w-full justify-center lg:justify-between gap-6">
-        <div className="text-base md:text-lg lg:text-xl pt-4 md:pt-8 lg:pt-12 font-redhat relative">
-          <div className="flex flex-col lg:flex-row gap-6 lg:space-x-6 xl:space-x-20 2xl:space-x-80">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4 md:gap-6 lg:gap-8 xl:gap-24">
-              {navLinks.map((link) => (
-                <div key={link.name} className="relative w-full">
-                  <button
-                    onClick={() => handleNavigation(link)}
-                    className="button w-full text-base md:text-lg lg:text-xl text-white bg-gray-800 transition-colors duration-200 rounded-md p-4 md:p-6 lg:px-16 lg:py-12 xl:px-28 xl:py-24 transform hover:scale-105 active:scale-95 focus:outline-none focus:ring focus:ring-teal-400 flex items-center justify-center"
-                  >
-                    <FontAwesomeIcon icon={link.icon} className="mr-2 w-6 h-6 md:w-8 md:h-8 lg:size-11" />
-                    <span className="whitespace-nowrap">{link.name}</span>
-                  </button>
+      <div className="max-w-7xl mx-auto px-4 py-8 font-grotesk">
+        <div className="flex flex-col items-center mb-8">
+          <div className="flex items-center space-x-2 mb-6">
+            <h2 className="text-2xl font-grotesk font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+              Countdown
+            </h2>
+            <Clock className="w-6 h-6 text-purple-400" />
+          </div>
+
+          <div className="grid grid-cols-2 md:flex md:flex-row gap-4">
+            {['days', 'hours', 'minutes', 'seconds'].map((unit) => (
+              <div key={unit} className="relative">
+                <div className="w-32 h-24 bg-white/5 backdrop-blur-xl rounded-xl flex flex-col items-center justify-center transition-all hover:bg-white/10">
+                  <span className="text-2xl font-bold text-gray-200">
+                    {String(timeLeft[unit]).padStart(2, '0')}
+                  </span>
+                  <span className="text-sm text-gray-400 uppercase mt-1">{unit}</span>
                 </div>
-              ))}
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4 md:gap-6 lg:gap-8 xl:gap-24">
-              {nav.map((link) => (
-                <div key={link.name} className="relative w-full">
-                  <button
-                    onClick={() => handleNavigation(link)}
-                    className="button w-full text-base md:text-lg lg:text-xl text-white bg-gray-800 transition-colors duration-200 rounded-md p-4 md:p-6 lg:px-16 lg:py-12 xl:px-28 xl:py-24 transform hover:scale-105 active:scale-95 focus:outline-none focus:ring focus:ring-teal-400 flex items-center justify-center"
-                  >
-                    <FontAwesomeIcon icon={link.icon} className="mr-2 w-6 h-6 md:w-8 md:h-8 lg:size-11" />
-                    <span className="whitespace-nowrap">{link.name}</span>
-                  </button>
-                </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
 
-        <div className="text-base md:text-lg lg:text-xl font-redhat w-full lg:w-auto">
-          <div className="text-center lg:text-left mb-2">
-            <div className="font-bold font-serif text-white">REFERENCE</div>
-            <p className="text-white">Add reference content here.</p>
-          </div>
+        {/* Navigation Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...navLinks, ...nav].map((link) => (
+            <button
+              key={link.name}
+              onClick={() => handleNavigation(link)}
+              className="p-6 bg-white/5 backdrop-blur-xl hover:bg-white/10 rounded-xl transition-all duration-200 group flex items-center justify-between hover:transform hover:scale-[1.02]"
+            >
+              <div className="flex items-center">
+                <FontAwesomeIcon 
+                  icon={link.icon} 
+                  className="w-6 h-6 text-indigo-400 group-hover:text-purple-400 transition-colors" 
+                />
+                <span className="ml-3 text-gray-200 font-grotesk">{link.name}</span>
+              </div>
+              <ChevronRight className="w-5 h-5 text-gray-500 group-hover:text-purple-400 transition-colors" />
+            </button>
+          ))}
+        </div>
+
+        {/* Reference Section */}
+        <div className="mt-8 p-6 bg-white/5 backdrop-blur-xl rounded-xl">
+          <h3 className="font-grotesk font-bold text-xl bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent mb-2">
+            REFERENCE
+          </h3>
+          <p className="text-gray-400">Add reference content here.</p>
         </div>
       </div>
     </div>
