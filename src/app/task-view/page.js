@@ -166,14 +166,14 @@ const TaskView = () => {
           <div className="flex justify-between items-center h-16">
             <Link href="/Navbar" className="flex items-center">
               <Home className="h-6 w-6 text-gray-400" />
-              <span className="ml-2 font-space-grotesk text-xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+              <span className="ml-2 font-grotesk text-xl font-bold text-[#00f5d0]">
                 Task Manager
               </span>
             </Link>
             <div className="flex items-center space-x-4">
               <button 
                 onClick={handleRequestOpen} 
-                className="bg-gradient-to-r from-indigo-500 to-purple-500 font-space-grotesk text-white px-4 py-2 rounded-xl flex flex-row items-center hover:opacity-90 transition-all"
+                className="bg-[#00f5d0] font-grotesk text-black px-4 py-2 rounded-xl flex flex-row items-center hover:opacity-90 transition-all"
               >
                 <Shield className="mr-2 h-4 w-4" />
                 Admin Portal
@@ -197,7 +197,7 @@ const TaskView = () => {
           placeholder="Search Groups, Folders, or Tasks"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full px-4 py-3.5 bg-white/5 backdrop-blur-xl rounded-xl text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
+          className="w-full px-4 py-3.5 bg-white/5 backdrop-blur-xl rounded-xl text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#00f5d0] transition-all"
         />
       </div>
 
@@ -248,8 +248,8 @@ const TaskView = () => {
                     onClick={() => setSelectedGroup(group)}
                     className="p-6 bg-white/5 backdrop-blur-xl hover:bg-white/10 rounded-xl transition-all duration-200 text-left hover:transform hover:scale-[1.02]"
                   >
-                    <Folder className="h-6 w-6 text-indigo-400" />
-                    <h3 className="mt-2 font-space-grotesk text-lg text-gray-200">{group.name}</h3>
+                    <Folder className="h-6 w-6 text-[#00f5d0]" />
+                    <h3 className="mt-2 font-grotesk text-lg text-gray-200">{group.name}</h3>
                     <p className="text-gray-400">{group.folders?.length || 0} folders</p>
                   </button>
                 ))}
@@ -263,8 +263,8 @@ const TaskView = () => {
                     onClick={() => setSelectedFolder(folder)}
                     className="p-6 bg-white/5 backdrop-blur-xl hover:bg-white/10 rounded-xl transition-all duration-200 text-left hover:transform hover:scale-[1.02]"
                   >
-                    <FileText className="h-6 w-6 text-indigo-400" />
-                    <h3 className="mt-2 font-space-grotesk text-lg text-gray-200">{folder.name}</h3>
+                    <FileText className="h-6 w-6 text-[#00f5d0]" />
+                    <h3 className="mt-2 font-grotesk text-lg text-gray-200">{folder.name}</h3>
                     <p className="text-gray-400">{folder.tasks?.length || 0} tasks</p>
                   </button>
                 ))}
@@ -277,12 +277,12 @@ const TaskView = () => {
                     key={task.id} 
                     className="p-5 bg-white/5 backdrop-blur-xl hover:bg-white/10 rounded-xl transition-all duration-200"
                   >
-                    <h3 className="font-space-grotesk font-medium text-lg text-gray-200">{task.name}</h3>
+                    <h3 className="font-grotesk font-medium text-lg text-gray-200">{task.name}</h3>
                     <a 
                       href={task.link} 
                       target="_blank" 
                       rel="noopener noreferrer" 
-                      className="text-indigo-400 hover:text-purple-400 hover:underline transition-colors inline-flex items-center mt-2"
+                      className="text-[#00f5d0] hover:underline transition-colors inline-flex items-center mt-2"
                     >
                       View Link <ChevronRight className="ml-1 h-4 w-4" />
                     </a>

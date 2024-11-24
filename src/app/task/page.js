@@ -5,22 +5,20 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 const Modal = ({ isOpen, onClose, title, children }) => {
-
   if (!isOpen) return null;
-    return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div className="bg-black/80 backdrop-blur-lg text-gray-200 rounded-lg p-6 w-full max-w-md relative border border-gray-800">
-          <button onClick={onClose} className="absolute right-4 top-4 text-gray-400 hover:text-gray-200">
-            <X className="h-4 w-4" />
-          </button>
-          <h2 className="text-lg font-space-grotesk font-semibold mb-4">{title}</h2>
-          {children}
-        </div>
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]">
+      <div className="bg-black/80 backdrop-blur-lg text-gray-200 rounded-lg p-6 w-full max-w-md relative border border-gray-800">
+        <button onClick={onClose} className="absolute right-4 top-4 text-gray-400 hover:text-gray-200">
+          <X className="h-4 w-4" />
+        </button>
+        <h2 className="text-lg font-grotesk font-semibold mb-4">{title}</h2>
+        {children}
       </div>
-    );
-  };
+    </div>
+  );
+};
   
-
 const UpdateGroupDialog = ({ group, onUpdate }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState(group?.name || '');
@@ -32,13 +30,13 @@ const UpdateGroupDialog = ({ group, onUpdate }) => {
   };
 
   return (
-    <>
+    <div className="relative z-50">
       <button
         onClick={(e) => {
           e.stopPropagation();
           setIsOpen(true);
         }}
-        className="text-blue-500 mr-2"
+        className="text-[#00f5d0] mr-2"
       >
         Edit
       </button>
@@ -49,16 +47,17 @@ const UpdateGroupDialog = ({ group, onUpdate }) => {
             placeholder="Group Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-2 border rounded"
+            className="w-full px-4 py-2 border rounded bg-gray-800 text-white"
           />
-          <button type="submit" className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+          <button type="submit" className="w-full px-4 py-2 bg-[#00f5d0] text-black rounded hover:bg-opacity-90">
             Update
           </button>
         </form>
       </Modal>
-    </>
+    </div>
   );
 };
+
 
 const UpdateFolderDialog = ({ folder, onUpdate }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -71,13 +70,13 @@ const UpdateFolderDialog = ({ folder, onUpdate }) => {
   };
 
   return (
-    <>
+    <div className="relative z-50">
       <button
         onClick={(e) => {
           e.stopPropagation();
           setIsOpen(true);
         }}
-        className="text-blue-500 mr-2"
+        className="text-[#00f5d0] mr-2"
       >
         Edit
       </button>
@@ -88,14 +87,61 @@ const UpdateFolderDialog = ({ folder, onUpdate }) => {
             placeholder="Folder Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-2 border rounded"
+            className="w-full px-4 py-2 border rounded bg-gray-800 text-white"
           />
-          <button type="submit" className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+          <button type="submit" className="w-full px-4 py-2 bg-[#00f5d0] text-black rounded hover:bg-opacity-90">
             Update
           </button>
         </form>
       </Modal>
-    </>
+    </div>
+  );
+};
+
+const UpdateTaskDialog = ({ task, onUpdate }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [name, setName] = useState(task?.name || '');
+  const [link, setLink] = useState(task?.link || '');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onUpdate(task.id, name, link);
+    setIsOpen(false);
+  };
+
+  return (
+    <div className="relative z-50">
+      <button 
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsOpen(true);
+        }} 
+        className="text-[#00f5d0] ml-2"
+      >
+        Edit
+      </button>
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Update Task">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            placeholder="Task Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full px-4 py-2 border rounded bg-gray-800 text-white"
+          />
+          <input
+            type="url"
+            placeholder="Link"
+            value={link}
+            onChange={(e) => setLink(e.target.value)}
+            className="w-full px-4 py-2 border rounded bg-gray-800 text-white"
+          />
+          <button type="submit" className="w-full px-4 py-2 bg-[#00f5d0] text-black rounded hover:bg-opacity-90">
+            Update
+          </button>
+        </form>
+      </Modal>
+    </div>
   );
 };
 
@@ -113,7 +159,7 @@ const AddItemDialog = ({ title, onSubmit }) => {
 
   return (
     <>
-      <button className="w-[] flex items-center justify-center px-4 py-2 bg-indigo-500 text-white rounded hover:bg-blue-600" onClick={() => setIsOpen(true)}>
+      <button className="w-[] flex items-center justify-center px-4 py-2 bg-[#00f5d0] text-black rounded hover:bg-[#00f5d0]-600" onClick={() => setIsOpen(true)}>
         <PlusCircle className="mr-2 h-4 w-4" />
         {title}
       </button>
@@ -127,50 +173,15 @@ const AddItemDialog = ({ title, onSubmit }) => {
             onChange={(e) => setName(e.target.value)}
             className="w-full px-4 py-2 border rounded"
           />
-          <button type="submit" className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Create</button>
+          <button type="submit" className="w-full px-4 py-2 bg-[#00f5d0]-500 text-white rounded hover:bg-[#00f5d0]-600">Create</button>
         </form>
       </Modal>
     </>
   );
 };
 
-const UpdateTaskDialog = ({ task, onUpdate }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [name, setName] = useState(task?.name || '');
-  const [link, setLink] = useState(task?.link || '');
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onUpdate(task.id, name, link);
-    setIsOpen(false);
-  };
 
 
-  return (
-    <>
-      <button onClick={() => setIsOpen(true)} className="text-[#90EE90] ml-2">Edit</button>
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Update Task">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
-            placeholder="Task Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-2 border rounded"
-          />
-          <input
-            type="url"
-            placeholder="Link"
-            value={link}
-            onChange={(e) => setLink(e.target.value)}
-            className="w-full px-4 py-2 border rounded"
-          />
-          <button type="submit" className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Update</button>
-        </form>
-      </Modal>
-    </>
-  );
-};
 const AddTaskDialog = ({ onSubmit }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState('');
@@ -186,7 +197,7 @@ const AddTaskDialog = ({ onSubmit }) => {
 
   return (
     <>
-      <button className="flex items-center justify-center px-4 py-2 bg-indigo-500 text-white rounded hover:bg-blue-600" onClick={() => setIsOpen(true)}>
+      <button className="flex items-center justify-center px-4 py-2 bg-[#00f5d0] text-black rounded hover:bg-[#00f5d0]-600" onClick={() => setIsOpen(true)}>
         <PlusCircle className="mr-2 h-4 w-4" />
         Add Task
       </button>
@@ -207,7 +218,7 @@ const AddTaskDialog = ({ onSubmit }) => {
             onChange={(e) => setLink(e.target.value)}
             className="w-full px-4 py-2 border rounded"
           />
-          <button type="submit" className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Create</button>
+          <button type="submit" className="w-full px-4 py-2 bg-[#00f5d0] text-white rounded hover:bg-[#00f5d0]-600">Create</button>
         </form>
       </Modal>
     </>
@@ -602,11 +613,11 @@ const TaskManager = () => {
         >
           {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
-        <h1 className="font-space-grotesk text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+        <h1 className="font-grotesk text-2xl font-bold text-[#00f5d0]">
           Task Administration
         </h1>
-        <Link href="./task-view" className="p-3 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl hover:opacity-90 transition-all">
-          <ChevronLeft size={24} className="text-white" />
+        <Link href="./task-view" className="p-3 bg-[#00f5d0] transition-all">
+          <ChevronLeft size={24} className="text-black" />
         </Link>
       </div>
   
@@ -625,13 +636,13 @@ const TaskManager = () => {
                 placeholder="Search groups..."
                 value={searchTerm}
                 onChange={handleSearch}
-                className="w-full px-4 py-3.5 bg-white/5 backdrop-blur-xl rounded-xl text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
+                className="w-full px-4 py-3.5 bg-white/5 backdrop-blur-xl rounded-xl text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#00f5d0]-500/50 transition-all"
               />
               <div className="flex items-center space-x-2">
                 <AddItemDialog 
                   title="Add Group" 
                   onSubmit={handleAddGroup}
-                  className="flex-1 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl font-space-grotesk text-lg"
+                  className="flex-1 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl font-grotesk text-lg"
                 />
               </div>
             </div>
@@ -639,21 +650,17 @@ const TaskManager = () => {
             <div className="flex-1 overflow-y-auto px-6 pb-6 space-y-3">
               {filteredGroups?.map(group => (
                 <div
-                  key={group.id}
-                  className={`p-4 rounded-xl cursor-pointer transition-all duration-200
-                    ${selectedGroup?.id === group.id 
-                      ? 'bg-indigo-500/20 backdrop-blur-xl' 
-                      : 'hover:bg-white/5 backdrop-blur-xl'}
-                  `}
-                  onClick={() => {
-                    setSelectedGroup(group);
-                    setSelectedFolder(null);
-                    setTaskSearchTerm('');
-                    setIsSidebarOpen(false);
-                  }}
-                >
-                  <div className="flex justify-between items-center">
-                    <span className="font-space-grotesk text-lg text-gray-200">{group.name}</span>
+                key={group.id}
+                className="p-4 rounded-xl cursor-pointer transition-all duration-200 relative"
+                onClick={() => {
+                  setSelectedGroup(group);
+                  setSelectedFolder(null);
+                  setTaskSearchTerm('');
+                  setIsSidebarOpen(false);
+                }}
+              >
+                  <div className="flex justify-between items-center relative z-40">
+                    <span className="font-grotesk text-lg text-gray-200">{group.name}</span>
                     <div className="flex items-center gap-2">
                       <UpdateGroupDialog group={group} onUpdate={handleUpdateGroup} />
                       <button
@@ -683,12 +690,12 @@ const TaskManager = () => {
                   placeholder="Search folders..."
                   value={folderSearchTerm}
                   onChange={handleFolderSearch}
-                  className="flex-1 px-4 py-3.5 bg-white/5 backdrop-blur-xl rounded-xl text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
+                  className="flex-1 px-4 py-3.5 bg-white/5 backdrop-blur-xl rounded-xl text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#00f5d0]500/50 transition-all"
                 />
                 <AddItemDialog 
                   title="Add Folder" 
                   onSubmit={handleAddFolder}
-                   className="w-full sm:w-1/4 py-3 px-4 bg-white/10 hover:bg-white/20 rounded-xl font-space-grotesk text-base whitespace-nowrap transition-all"
+                   className="w-full sm:w-1/4 py-3 px-4 bg-white/10 hover:bg-white/20 rounded-xl font-grotesk text-base whitespace-nowrap transition-all"
                 />
               </div>
   
@@ -706,7 +713,7 @@ const TaskManager = () => {
                       onClick={() => setSelectedFolder(folder)}
                     >
                       <div className="flex justify-between items-center">
-                        <span className="font-space-grotesk text-lg text-gray-200">{folder.name}</span>
+                        <span className="font-grotesk text-lg text-gray-200">{folder.name}</span>
                         <div className="flex items-center gap-2">
                           <UpdateFolderDialog folder={folder} onUpdate={handleUpdateFolder} />
                           <button
@@ -738,7 +745,7 @@ const TaskManager = () => {
                 />
                 <AddTaskDialog 
                   onSubmit={handleAddTask}
-                  className="w-full sm:w-1/4 py-3 px-4 bg-white/10 hover:bg-white/20 rounded-xl font-space-grotesk text-base whitespace-nowrap transition-all"
+                  className="w-full sm:w-1/4 py-3 px-4 bg-white/10 hover:bg-white/20 rounded-xl font-grotesk text-base whitespace-nowrap transition-all"
                 />
               </div>
   
@@ -747,17 +754,17 @@ const TaskManager = () => {
                   ?.filter(task => task.name.toLowerCase().includes(taskSearchTerm.toLowerCase()))
                   .map(task => (
                     <div
-                      key={task.id}
-                      className="p-5 rounded-xl bg-white/5 backdrop-blur-xl hover:bg-white/10 transition-all duration-200"
-                    >
-                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+  key={task.id}
+  className="p-5 rounded-xl bg-white/5 backdrop-blur-xl hover:bg-white/10 transition-all duration-200 relative"
+>
+                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative z-40">
                         <div className="space-y-2">
-                          <h3 className="font-space-grotesk font-medium text-lg text-gray-200">
+                          <h3 className="font-grotesk font-medium text-lg text-gray-200">
                             {task.name}
                           </h3>
                           <a
                             href={task.link}
-                            className="text-indigo-400 hover:text-purple-400 hover:underline transition-colors"
+                            className="text-[#00f5d0] hover:underline transition-colors"
                             target="_blank"
                             rel="noopener noreferrer"
                           >
