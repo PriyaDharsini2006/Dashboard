@@ -23,6 +23,7 @@ module.exports = {
       fontFamily: {
         redhat: ['Red Hat Display', 'sans-serif'],
         hacked: ['Hacked', 'sans-serif'], 
+        'space-grotesk': ['Space Grotesk', 'sans-serif'],
       },
     },
   },

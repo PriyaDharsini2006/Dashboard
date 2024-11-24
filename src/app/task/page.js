@@ -7,22 +7,19 @@ import { useSession } from 'next-auth/react';
 const Modal = ({ isOpen, onClose, title, children }) => {
 
   if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white text-gray-800 rounded-lg p-6 w-full max-w-md relative">
-        <button
-          onClick={onClose}
-          className="absolute right-4 top-4 text-gray-500 hover:text-gray-700"
-        >
-          <X className="h-4 w-4" />
-        </button>
-        <h2 className="text-lg font-semibold mb-4">{title}</h2>
-        {children}
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-black/80 backdrop-blur-lg text-gray-200 rounded-lg p-6 w-full max-w-md relative border border-gray-800">
+          <button onClick={onClose} className="absolute right-4 top-4 text-gray-400 hover:text-gray-200">
+            <X className="h-4 w-4" />
+          </button>
+          <h2 className="text-lg font-space-grotesk font-semibold mb-4">{title}</h2>
+          {children}
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
+  
 
 const UpdateGroupDialog = ({ group, onUpdate }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -116,7 +113,7 @@ const AddItemDialog = ({ title, onSubmit }) => {
 
   return (
     <>
-      <button className="w-full flex items-center justify-center px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" onClick={() => setIsOpen(true)}>
+      <button className="w-[] flex items-center justify-center px-4 py-2 bg-indigo-500 text-white rounded hover:bg-blue-600" onClick={() => setIsOpen(true)}>
         <PlusCircle className="mr-2 h-4 w-4" />
         {title}
       </button>
@@ -189,7 +186,7 @@ const AddTaskDialog = ({ onSubmit }) => {
 
   return (
     <>
-      <button className="flex items-center justify-center px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" onClick={() => setIsOpen(true)}>
+      <button className="flex items-center justify-center px-4 py-2 bg-indigo-500 text-white rounded hover:bg-blue-600" onClick={() => setIsOpen(true)}>
         <PlusCircle className="mr-2 h-4 w-4" />
         Add Task
       </button>
@@ -594,140 +591,132 @@ const TaskManager = () => {
   const closeSidebar = () => setIsSidebarOpen(false);
 
 
-
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-200">
-      {/* Mobile Header */}
-      <div className="lg:hidden flex items-center justify-between p-4 bg-gray-800">
+    <div className="min-h-screen bg-black text-gray-300">
+      {/* Header - visible on all screen sizes */}
+      <div className="fixed top-0 w-full z-30 flex items-center justify-between p-4 bg-black/40 backdrop-blur-xl">
         <button
           onClick={toggleSidebar}
-          className="p-2 hover:bg-gray-700 rounded-lg"
+          className="p-3 hover:bg-white/10 rounded-xl transition-all lg:hidden"
           aria-label={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
         >
-          {isSidebarOpen ? <X /> : <Menu />}
+          {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
-        <h1 className="text-xl font-semibold">Task Manager</h1>
-        <Link href="./task-view" className="p-2 bg-blue-500 rounded-lg hover:bg-blue-600">
-          <ChevronLeft />
+        <h1 className="font-space-grotesk text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+          Task Administration
+        </h1>
+        <Link href="./task-view" className="p-3 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl hover:opacity-90 transition-all">
+          <ChevronLeft size={24} className="text-white" />
         </Link>
       </div>
-
-      {/* Sidebar Overlay */}
-      {isSidebarOpen && (
-        <div
-          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-10"
-          onClick={closeSidebar}
-          aria-label="Close sidebar overlay"
-        />
-      )}
-
-      <div className="flex flex-col lg:flex-row h-[calc(100vh-4rem)] lg:h-screen">
+  
+      <div className="flex flex-col lg:flex-row h-[calc(100vh-4rem)] pt-16">
         {/* Sidebar */}
-        <div className={` 
-          fixed lg:static inset-0 z-20 bg-gray-800
+        <div className={`
+          fixed lg:static inset-0 z-20 bg-black/60 backdrop-blur-2xl
           transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-          lg:transform-none transition-transform duration-200 ease-in-out
-          w-72 lg:w-96 overflow-hidden flex flex-col
+          lg:transform-none transition-transform duration-300 ease-in-out
+          w-80 lg:w-96
         `}>
-          {/* Sidebar Header with Close Button */}
-          <div className="lg:hidden flex justify-between items-center p-4 border-b border-gray-700">
-            <h2 className="text-lg font-semibold">Groups</h2>
-            <button
-              onClick={closeSidebar}
-              className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
-              aria-label="Close sidebar"
-            >
-              <X className="h-5 w-5" />
-            </button>
-          </div>
-
-          <div className="p-4 space-y-4">
-            <input
-              type="text"
-              placeholder="Search groups..."
-              value={searchTerm}
-              onChange={handleSearch}
-              className="w-full px-4 py-2 bg-gray-700 rounded-lg text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-
-            <div className="flex justify-between items-center">
-              <AddItemDialog title="Add Group" onSubmit={handleAddGroup} />
-              <Link href="./task-view" className="px-4 py-2 ml-[5px] bg-blue-500 rounded-lg hover:bg-blue-600">
-                Back
-              </Link>
+          <div className="h-full flex flex-col">
+            <div className="p-6 space-y-4">
+              <input
+                type="text"
+                placeholder="Search groups..."
+                value={searchTerm}
+                onChange={handleSearch}
+                className="w-full px-4 py-3.5 bg-white/5 backdrop-blur-xl rounded-xl text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
+              />
+              <div className="flex items-center space-x-2">
+                <AddItemDialog 
+                  title="Add Group" 
+                  onSubmit={handleAddGroup}
+                  className="flex-1 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl font-space-grotesk text-lg"
+                />
+              </div>
+            </div>
+  
+            <div className="flex-1 overflow-y-auto px-6 pb-6 space-y-3">
+              {filteredGroups?.map(group => (
+                <div
+                  key={group.id}
+                  className={`p-4 rounded-xl cursor-pointer transition-all duration-200
+                    ${selectedGroup?.id === group.id 
+                      ? 'bg-indigo-500/20 backdrop-blur-xl' 
+                      : 'hover:bg-white/5 backdrop-blur-xl'}
+                  `}
+                  onClick={() => {
+                    setSelectedGroup(group);
+                    setSelectedFolder(null);
+                    setTaskSearchTerm('');
+                    setIsSidebarOpen(false);
+                  }}
+                >
+                  <div className="flex justify-between items-center">
+                    <span className="font-space-grotesk text-lg text-gray-200">{group.name}</span>
+                    <div className="flex items-center gap-2">
+                      <UpdateGroupDialog group={group} onUpdate={handleUpdateGroup} />
+                      <button
+                        className="p-2 hover:bg-white/10 rounded-xl transition-all"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteGroup(group.id, e);
+                        }}
+                      >
+                        <Trash2 size={20} className="text-gray-400 hover:text-red-400" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-
-          <div className="flex-1 overflow-y-auto px-4 py-2 space-y-2">
-            {filteredGroups?.map(group => (
-              <div
-                key={group.id}
-                className={`p-3 rounded-lg cursor-pointer hover:bg-gray-700 
-                  ${selectedGroup?.id === group.id ? 'bg-gray-600' : ''} 
-                  flex justify-between items-center`}
-                onClick={() => {
-                  setSelectedGroup(group);           // Set the selected group
-                  setSelectedFolder(null);            // Reset folder to null when switching groups
-                  setTaskSearchTerm('');              // Reset task search term when switching groups
-                  setIsSidebarOpen(false);            // Close sidebar
-                }}
-              >
-                <span className="truncate">{group.name}</span>
-                <div className="flex items-center space-x-2">
-                  <UpdateGroupDialog group={group} onUpdate={handleUpdateGroup} />
-                  <button
-                    className="p-1 hover:bg-gray-600 rounded"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteGroup(group.id, e); // Pass both group.id and the event
-                    }}
-                  >
-                    <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-500" />
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
-
+  
         {/* Main Content */}
-        <div className="flex-1 p-4 lg:p-8 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto bg-black p-6 lg:p-8">
           {selectedGroup && (
-            <div className="space-y-6">
-              <div className="flex flex-col sm:flex-row gap-4 items-center">
+            <div className="space-y-8">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <input
                   type="text"
                   placeholder="Search folders..."
                   value={folderSearchTerm}
                   onChange={handleFolderSearch}
-                  className="w-full px-4 py-2 bg-gray-700 rounded-lg text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="flex-1 px-4 py-3.5 bg-white/5 backdrop-blur-xl rounded-xl text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
                 />
-                <AddItemDialog title="Add Folder" onSubmit={handleAddFolder} />
+                <AddItemDialog 
+                  title="Add Folder" 
+                  onSubmit={handleAddFolder}
+                   className="w-full sm:w-1/4 py-3 px-4 bg-white/10 hover:bg-white/20 rounded-xl font-space-grotesk text-base whitespace-nowrap transition-all"
+                />
               </div>
-
+  
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {selectedGroup.folders
                   ?.filter(folder => folder.name.toLowerCase().includes(folderSearchTerm.toLowerCase()))
                   .map(folder => (
                     <div
                       key={folder.id}
-                      className={`p-4 bg-gray-800 rounded-lg shadow-lg cursor-pointer
-                        ${selectedFolder?.id === folder.id ? 'ring-2 ring-blue-500' : ''}
-                        hover:bg-gray-700 transition-colors duration-200`}
+                      className={`p-5 rounded-xl cursor-pointer transition-all duration-200 hover:transform hover:scale-[1.02]
+                        ${selectedFolder?.id === folder.id 
+                          ? 'bg-indigo-500/20 backdrop-blur-xl' 
+                          : 'bg-white/5 hover:bg-white/10 backdrop-blur-xl'}
+                      `}
                       onClick={() => setSelectedFolder(folder)}
                     >
                       <div className="flex justify-between items-center">
-                        <span className="truncate flex-1">{folder.name}</span>
-                        <div className="flex items-center space-x-2">
+                        <span className="font-space-grotesk text-lg text-gray-200">{folder.name}</span>
+                        <div className="flex items-center gap-2">
                           <UpdateFolderDialog folder={folder} onUpdate={handleUpdateFolder} />
                           <button
-                            className="p-1 hover:bg-gray-600 rounded"
+                            className="p-2 hover:bg-white/10 rounded-xl transition-all"
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleDeleteFolder(folder.id, e); // Pass `e` as the second argument
+                              handleDeleteFolder(folder.id, e);
                             }}
                           >
-                            <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-500" />
+                            <Trash2 size={20} className="text-gray-400 hover:text-red-400" />
                           </button>
                         </div>
                       </div>
@@ -736,48 +725,52 @@ const TaskManager = () => {
               </div>
             </div>
           )}
-
-          {selectedGroup && selectedFolder && (
+  
+  {selectedGroup && selectedFolder && (
             <div className="mt-8 space-y-6">
-              {/* Task search and list */}
-              <div className="flex flex-col sm:flex-row gap-4 items-center">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <input
                   type="text"
                   placeholder="Search tasks..."
                   value={taskSearchTerm}
                   onChange={handleTaskSearch}
-                  className="w-full px-4 py-2 bg-gray-700 rounded-lg text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="flex-1 px-4 py-3.5 bg-white/5 backdrop-blur-xl rounded-xl text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all w-full sm:w-3/4"
                 />
-                <AddTaskDialog onSubmit={handleAddTask} />
+                <AddTaskDialog 
+                  onSubmit={handleAddTask}
+                  className="w-full sm:w-1/4 py-3 px-4 bg-white/10 hover:bg-white/20 rounded-xl font-space-grotesk text-base whitespace-nowrap transition-all"
+                />
               </div>
-
+  
               <div className="space-y-4">
                 {selectedFolder.tasks
                   ?.filter(task => task.name.toLowerCase().includes(taskSearchTerm.toLowerCase()))
                   .map(task => (
                     <div
                       key={task.id}
-                      className="p-4 bg-gray-800 rounded-lg shadow-lg hover:bg-gray-700 transition-colors duration-200"
+                      className="p-5 rounded-xl bg-white/5 backdrop-blur-xl hover:bg-white/10 transition-all duration-200"
                     >
                       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <div className="space-y-2">
-                          <h3 className="font-medium text-white">{task.name}</h3>
+                          <h3 className="font-space-grotesk font-medium text-lg text-gray-200">
+                            {task.name}
+                          </h3>
                           <a
                             href={task.link}
-                            className="text-blue-500 hover:text-blue-400 hover:underline inline-block"
+                            className="text-indigo-400 hover:text-purple-400 hover:underline transition-colors"
                             target="_blank"
                             rel="noopener noreferrer"
                           >
                             View Link
                           </a>
                         </div>
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center gap-2">
                           <UpdateTaskDialog task={task} onUpdate={handleUpdateTask} />
                           <button
-                            className="p-1 hover:bg-gray-600 rounded"
+                            className="p-2 hover:bg-white/10 rounded-xl transition-all"
                             onClick={() => handleDeleteTask(task.id)}
                           >
-                            <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-500" />
+                            <Trash2 size={20} className="text-gray-400 hover:text-red-400" />
                           </button>
                         </div>
                       </div>
@@ -790,7 +783,7 @@ const TaskManager = () => {
       </div>
     </div>
   );
-}
+};
 export default TaskManager;
 
 
