@@ -159,26 +159,28 @@ const TaskView = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-200">
+    <div className="min-h-screen bg-black text-gray-300">
       {/* Navbar */}
-      <nav className="bg-gray-800 shadow-sm border-b">
+      <nav className="fixed top-0 w-full z-30 bg-black backdrop-blur-xl border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/Navbar" className="flex items-center">
               <Home className="h-6 w-6 text-gray-400" />
-              <span className="ml-2 font-bold font-serif text-gray-200">Task Manager</span>
+              <span className="ml-2 font-grotesk text-xl font-bold text-[#00f5d0]">
+                Task Manager
+              </span>
             </Link>
             <div className="flex items-center space-x-4">
               <button 
                 onClick={handleRequestOpen} 
-                className="bg-green-600 hover:bg-green-700 font-serif text-white px-4 py-2 rounded-md flex flex-row items-center transition-colors"
+                className="bg-[#00f5d0] font-grotesk text-black px-4 py-2 rounded-xl flex flex-row items-center hover:opacity-90 transition-all"
               >
-                <Shield className="mr-2 font-serif font-bold h-4 w-4" />
+                <Shield className="mr-2 h-4 w-4" />
                 Admin Portal
               </button>
               <button 
                 onClick={handleSignOut} 
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex flex-row items-center transition-colors"
+                className="bg-white/5 hover:bg-white/10 text-gray-300 px-4 py-2 rounded-xl flex flex-row items-center transition-all"
               >
                 <LogOut className="mr-2 h-4 w-4" />
                 Sign Out
@@ -189,13 +191,13 @@ const TaskView = () => {
       </nav>
 
       {/* Search Input */}
-      <div className="max-w-7xl mx-auto px-4 py-4">
+      <div className="max-w-7xl mx-auto px-4 py-4 mt-16">
         <input
           type="text"
           placeholder="Search Groups, Folders, or Tasks"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full px-4 py-2 border rounded-md bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-4 py-3.5 bg-white/5 backdrop-blur-xl rounded-xl text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#00f5d0] transition-all"
         />
       </div>
 
@@ -206,7 +208,7 @@ const TaskView = () => {
             <li>
               <button
                 onClick={handleBackToGroups}
-                className="text-gray-400 hover:text-gray-200"
+                className="text-gray-400 hover:text-gray-200 transition-colors"
               >
                 Groups
               </button>
@@ -217,7 +219,7 @@ const TaskView = () => {
                 <li>
                   <button
                     onClick={handleBackToFolders}
-                    className="text-gray-400 hover:text-gray-200"
+                    className="text-gray-400 hover:text-gray-200 transition-colors"
                   >
                     {selectedGroup.name}
                   </button>
@@ -244,10 +246,10 @@ const TaskView = () => {
                   <button
                     key={group.id}
                     onClick={() => setSelectedGroup(group)}
-                    className="bg-gray-800 rounded-lg p-6 shadow-sm text-left hover:bg-gray-700 transition-colors"
+                    className="p-6 bg-white/5 backdrop-blur-xl hover:bg-white/10 rounded-xl transition-all duration-200 text-left hover:transform hover:scale-[1.02]"
                   >
-                    <Folder className="h-6 w-6 text-blue-500" />
-                    <h3 className="text-gray-200">{group.name}</h3>
+                    <Folder className="h-6 w-6 text-[#00f5d0]" />
+                    <h3 className="mt-2 font-grotesk text-lg text-gray-200">{group.name}</h3>
                     <p className="text-gray-400">{group.folders?.length || 0} folders</p>
                   </button>
                 ))}
@@ -259,21 +261,29 @@ const TaskView = () => {
                   <button
                     key={folder.id}
                     onClick={() => setSelectedFolder(folder)}
-                    className="bg-gray-800 rounded-lg p-6 shadow-sm text-left hover:bg-gray-700 transition-colors"
+                    className="p-6 bg-white/5 backdrop-blur-xl hover:bg-white/10 rounded-xl transition-all duration-200 text-left hover:transform hover:scale-[1.02]"
                   >
-                    <FileText className="h-6 w-6 text-blue-500" />
-                    <h3 className="text-gray-200">{folder.name}</h3>
+                    <FileText className="h-6 w-6 text-[#00f5d0]" />
+                    <h3 className="mt-2 font-grotesk text-lg text-gray-200">{folder.name}</h3>
                     <p className="text-gray-400">{folder.tasks?.length || 0} tasks</p>
                   </button>
                 ))}
               </div>
             )}
             {selectedFolder && (
-              <div className="space-y-6">
+              <div className="space-y-4">
                 {filteredTasks.map(task => (
-                  <div key={task.id} className="bg-gray-800 rounded-lg p-6 shadow-sm hover:bg-gray-700 transition-colors">
-                    <h3 className="text-gray-200">{task.name}</h3>
-                    <a href={task.link} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-400 inline-flex items-center">
+                  <div 
+                    key={task.id} 
+                    className="p-5 bg-white/5 backdrop-blur-xl hover:bg-white/10 rounded-xl transition-all duration-200"
+                  >
+                    <h3 className="font-grotesk font-medium text-lg text-gray-200">{task.name}</h3>
+                    <a 
+                      href={task.link} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="text-[#00f5d0] hover:underline transition-colors inline-flex items-center mt-2"
+                    >
                       View Link <ChevronRight className="ml-1 h-4 w-4" />
                     </a>
                   </div>

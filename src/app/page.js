@@ -22,7 +22,7 @@ const Page = () => {
         </h1>
       </div>
     </div>
-  );
+  )
 };
 
 export default Page;  

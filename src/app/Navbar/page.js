@@ -3,13 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Clock, ChevronRight } from 'lucide-react';
 import {
   faClipboardList,
-  faCog,
-  faDatabase,
   faArrowUpRightFromSquare,
   faListCheck,
   faCheckCircle,
+  faUsers,
   faHome,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -42,10 +42,11 @@ const Navbar = () => {
           });
 
           if (!response.ok) {
-            throw new Error('Failed to check admin status');
+            throw new Error(`Failed to check admin status: ${response.status}`);
           }
 
           const data = await response.json();
+          console.log('Admin check response:', data);
           setIsAdmin(data.isAdmin);
         } catch (error) {
           console.error('Error checking admin status:', error);
@@ -59,7 +60,10 @@ const Navbar = () => {
 
    useEffect(() => {
     async function fetchTrafficCount() {
+      console.log('Fetching traffic count. isAdmin:', isAdmin);
+      
       if (!isAdmin) {
+        console.log('Skipping traffic fetch - not admin');
         return;
       }
 
@@ -72,6 +76,7 @@ const Navbar = () => {
         }
         
         const data = await response.json();
+        console.log('Traffic count response:', data);
         
         if (data.error) {
           throw new Error(data.error);
@@ -92,37 +97,38 @@ const Navbar = () => {
     }
   }, [isAdmin]);
 
-  // Rest of your existing code remains the same...
 
   const renderTrafficCount = () => {
+    
+    
     if (!isAdmin) {
-      return null; // Don't render anything if user is not admin
+      return null;
     }
 
     return (
-      <div className="text-white text-lg md:text-xl lg:text-2xl font-bold mb-4">
-        Total Traffic Count:{' '}
-        {fetchError ? (
-          <span className="text-red-500 text-base">{fetchError}</span>
-        ) : totalTraffic !== null ? (
-          totalTraffic.toLocaleString()
-        ) : (
-          <span className="animate-pulse">Loading...</span>
-        )}
-      </div>
-    );
-  };
+      <div className="text-white text-lg md:text-xl lg:text-2xl font-grotesk mb-4">
+      Traffic Count:{' '}
+      {fetchError ? (
+        <span className="text-red-500 text-base">{fetchError}</span>
+      ) : totalTraffic !== null ? (
+        totalTraffic.toLocaleString()
+      ) : (
+        <span className="animate-pulse">Loading...</span>
+      )}
+    </div>
+  );
+};
+
 
   const navLinks = [
     { name: 'External OD', href: '#', icon: faArrowUpRightFromSquare },
-    { name: 'Internal OD', href: '#', icon: faClipboardList },
-    { name: 'Workspace', href: '#', icon: faCog },
-    { name: 'Database', href: '#', icon: faDatabase },
+    { name: 'Internal OD', href: 'https://internal-od.vercel.app/', icon: faClipboardList },
+    { name: 'Stayback', href: '/stayback', icon: faUsers },
   ];
 
   const nav = [
-    { name: 'Tasks', href: '/task-view', icon: faListCheck, requiresAuth: true },
-    { name: 'PR Mail', href: '#', icon: faCheckCircle },
+    { name: 'Tasks & Workspace', href: '/task-view', icon: faListCheck, requiresAuth: true },
+    { name: 'PR Mail', href: 'https://hackerz-mail-automation.vercel.app', icon: faCheckCircle },
     { name: 'Treasury', href: 'https://hackerz-treasury.vercel.app', icon: faHome },
   ];
 
@@ -150,7 +156,6 @@ const Navbar = () => {
 
   useEffect(() => {
     if (!session) {
-      // Redirect to sign-in if not authenticated
       router.push('/sign');
       return;
     }
@@ -170,100 +175,108 @@ const Navbar = () => {
   const handleNavigation = (link) => {
     if (link.requiresAuth) {
       if (status === 'loading') {
-        return; // Wait for session check to complete
+        return;
       }
 
       if (!session) {
-        // Redirect to sign-in if not authenticated
         router.push('/sign');
         return;
       }
 
-      // Check if email domain is authorized
       if (!session.user?.email?.endsWith('@citchennai.net')) {
         router.push('/access-denied');
         return;
       }
     }
 
-    // Handle navigation based on href type
     if (link.href.startsWith('http')) {
       window.open(link.href, '_blank');
     } else {
       router.push(link.href);
     }
   };
-  // Rest of your countdown and navigation code remains the same...
 
   return (
-    <div className="flex flex-col items-center bg-black text-center p-4 md:p-6 lg:p-10">
-      <div className="text-3xl md:text-4xl lg:text-6xl text-white font-serif font-bold mb-4 md:mb-6 lg:mb-8">DASHBOARD</div>
-      {renderTrafficCount()}
-      <div className="flex flex-col items-center mb-4 md:mb-6">
-        <div className="flex flex-row p-2 md:p-4">
-          <h1 className="glitch text-3xl md:text-4xl lg:text-5xl font-bold font-serif text-teal-400 mr-1">Count</h1>
-          <h1 className="glitch text-3xl md:text-4xl lg:text-5xl font-bold font-serif text-red-300">Down</h1>
+    <div className="min-h-screen bg-black text-gray-300">
+      {/* Header Section */}
+      <div className="w-full backdrop-blur-xl border-b border-white/10 p-4 md:p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex flex-col sm:flex-row items-center gap-4 w-full">
+              <img 
+                src="/NewHackerzWhite.png"
+                alt="Dashboard Icon"
+                className="h-[100px] w-[100px] md:h-[150px] md:w-[150px] object-contain"
+              />
+              <h1 className="text-4xl md:text-7xl text-center flex-1 font-hacked font-bold bg-gradient-to-b from-gray-200 to-gray-800 bg-clip-text text-transparent">
+                DASHBOARD
+              </h1>
+            </div>
+            <div className="flex items-center shrink-0">
+              {renderTrafficCount()}
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div className="grid grid-cols-2 md:flex md:flex-row gap-2 md:space-x-4 mt-4">
-          {['days', 'hours', 'minutes', 'seconds'].map((unit) => (
-            <div key={unit} className="relative w-24 md:w-32 lg:w-40 h-20 md:h-24 lg:h-28 px-1 md:px-2 perspective">
-              <div className="flip-card-inner">
-                <div className="flip-card-front bg-gray-800 text-teal-300 text-xl md:text-2xl lg:text-3xl font-bold flex justify-center items-center rounded-md">
-                  <span>{String(timeLeft[unit]).padStart(2, '0')}</span>
-                </div>
-                <div className="flip-card-back bg-gray-900 text-teal-300 text-xl md:text-2xl lg:text-3xl font-bold flex justify-center items-center rounded-md rotate-y-180">
-                  <span className="text-sm md:text-base">{unit.charAt(0).toUpperCase() + unit.slice(1)} Left</span>
+      <div className="max-w-7xl mx-auto px-4 py-6 md:py-8 font-grotesk">
+        {/* Countdown Section */}
+        <div className="flex flex-col items-center mb-6 md:mb-8">
+          <div className="flex items-center space-x-2 mb-4 md:mb-6">
+            <h2 className="text-xl md:text-2xl font-grotesk text-[#00f5d0] font-bold">
+              Countdown
+            </h2>
+            <Clock className="w-5 h-5 md:w-6 md:h-6 text-[#00f5d0]" />
+          </div>
+
+          <div className="grid grid-cols-2 md:flex md:flex-row gap-3 md:gap-4">
+            {['days', 'hours', 'minutes', 'seconds'].map((unit) => (
+              <div key={unit} className="relative">
+                <div className="w-24 md:w-32 h-20 md:h-24 bg-white/5 backdrop-blur-xl rounded-xl flex flex-col items-center justify-center transition-all hover:bg-white/10">
+                  <span className="text-xl md:text-2xl font-bold text-gray-200">
+                    {String(timeLeft[unit]).padStart(2, '0')}
+                  </span>
+                  <span className="text-xs md:text-sm text-gray-400 uppercase mt-1">
+                    {unit}
+                  </span>
                 </div>
               </div>
-              <span className="text-white text-xs md:text-sm font-medium uppercase">{unit}</span>
-            </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Navigation Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          {[...navLinks, ...nav].map((link) => (
+            <button
+              key={link.name}
+              onClick={() => handleNavigation(link)}
+              className="p-4 md:p-6 bg-white/5 backdrop-blur-xl hover:bg-white/10 rounded-xl transition-all duration-200 group flex items-center justify-between hover:transform hover:scale-[1.02]"
+            >
+              <div className="flex items-center">
+                <FontAwesomeIcon 
+                  icon={link.icon} 
+                  className="w-5 h-5 md:w-6 md:h-6 text-[#00f5d0] group-hover:text-[#00f5d0] transition-colors" 
+                />
+                <span className="ml-3 text-sm md:text-base text-gray-200 font-grotesk">
+                  {link.name}
+                </span>
+              </div>
+              <ChevronRight className="w-4 h-4 md:w-5 md:h-5 text-gray-500 group-hover:text-[#00f5d0] transition-colors" />
+            </button>
           ))}
         </div>
-      </div>
 
-
-      {/* Rest of your JSX remains the same until the button onClick handlers */}
-      <div className="flex flex-col lg:flex-row w-full justify-center lg:justify-between gap-6">
-        <div className="text-base md:text-lg lg:text-xl pt-4 md:pt-8 lg:pt-12 font-redhat relative">
-          <div className="flex flex-col lg:flex-row gap-6 lg:space-x-6 xl:space-x-20 2xl:space-x-80">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4 md:gap-6 lg:gap-8 xl:gap-24">
-              {navLinks.map((link) => (
-                <div key={link.name} className="relative w-full">
-                  <button
-                    onClick={() => handleNavigation(link)}
-                    className="button w-full text-base md:text-lg lg:text-xl text-white bg-gray-800 transition-colors duration-200 rounded-md p-4 md:p-6 lg:px-16 lg:py-12 xl:px-28 xl:py-24 transform hover:scale-105 active:scale-95 focus:outline-none focus:ring focus:ring-teal-400 flex items-center justify-center"
-                  >
-                    <FontAwesomeIcon icon={link.icon} className="mr-2 w-6 h-6 md:w-8 md:h-8 lg:size-11" />
-                    <span className="whitespace-nowrap">{link.name}</span>
-                  </button>
-                </div>
-              ))}
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4 md:gap-6 lg:gap-8 xl:gap-24">
-              {nav.map((link) => (
-                <div key={link.name} className="relative w-full">
-                  <button
-                    onClick={() => handleNavigation(link)}
-                    className="button w-full text-base md:text-lg lg:text-xl text-white bg-gray-800 transition-colors duration-200 rounded-md p-4 md:p-6 lg:px-16 lg:py-12 xl:px-28 xl:py-24 transform hover:scale-105 active:scale-95 focus:outline-none focus:ring focus:ring-teal-400 flex items-center justify-center"
-                  >
-                    <FontAwesomeIcon icon={link.icon} className="mr-2 w-6 h-6 md:w-8 md:h-8 lg:size-11" />
-                    <span className="whitespace-nowrap">{link.name}</span>
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="text-base md:text-lg lg:text-xl font-redhat w-full lg:w-auto">
-          <div className="text-center lg:text-left mb-2">
-            <div className="font-bold font-serif text-white">REFERENCE</div>
-            <p className="text-white">Add reference content here.</p>
-          </div>
+        {/* Reference Section */}
+        <div className="mt-6 md:mt-8 p-4 md:p-6 bg-white/5 backdrop-blur-xl rounded-xl">
+          <h3 className="font-grotesk text-[#00f5d0] text-lg md:text-xl mb-2">
+            REFERENCE
+          </h3>
+          <p className="text-sm md:text-base text-gray-400">
+            Add reference content here.
+          </p>
         </div>
       </div>
-      {/* Rest of your JSX remains the same... */}
     </div>
   );
 };
