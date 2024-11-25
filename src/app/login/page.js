@@ -151,7 +151,7 @@ export default function Login() {
         ))}
         <div className={styles.signin}>
           <div className={styles.content}>
-            <h1 className={`${styles.header} text-2xl font-bold text-center text-green-400`}>USE COLLEGE MAIL ID</h1>
+            <h1 className={`${styles.header} text-2xl font-grotesk text-center text-green-400`}>USE COLLEGE MAIL ID</h1>
             
             <div className="space-y-4">
               {/* Show sign-in button only if not authenticated */}
