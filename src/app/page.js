@@ -15,6 +15,7 @@ const Page = () => {
       <Hyperplexed onAnimationEnd={handleAnimationEnd} />
       <div 
         className={`transition-opacity duration-1000 
+          
           ${showContent ? 'opacity-100' : 'opacity-0'}`}
       >
         <Login />
