@@ -270,10 +270,11 @@ const Navbar = () => {
         {/* Reference Section */}
         <div className="mt-6 md:mt-8 p-4 md:p-6 bg-white/5 backdrop-blur-xl rounded-xl">
           <h3 className="font-grotesk text-[#00f5d0] text-lg md:text-xl mb-2">
-            REFERENCE
+            REFERRALS
           </h3>
           <p className="text-sm md:text-base text-gray-400">
-            Add reference content here.
+            Referrals 1
+            Referrals 2
           </p>
         </div>
       </div>
