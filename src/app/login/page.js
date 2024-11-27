@@ -108,22 +108,18 @@ export default function Login() {
           if (isAdmin) {
             // If admin, redirect to access-granted page first
             setTimeout(() => {
-              router.push('/acess-granted'); // Show access-granted page
+              router.push('/task'); // Show access-granted page
               
               // After 5 seconds, redirect to the task page
-              setTimeout(() => {
-                router.push('/task'); // Redirect to task page
-              }, 3000); // Delay for 5 seconds
+               // Delay for 5 seconds
             }, 3000); // Delay to show access-granted page
           } else {
             // If not admin, redirect to access-denied page immediately
             setTimeout(() => {
-              router.push('/acess-denied'); // Show access-granted page
+              router.push('/task-view'); // Show access-granted page
               
               // After 5 seconds, redirect to the task page
-              setTimeout(() => {
-                router.push('/task-view'); // Redirect to task page
-              }, 3000); // Delay for 5 seconds
+               // Delay for 5 seconds
             }, 3000);
           }
         } catch (error) {

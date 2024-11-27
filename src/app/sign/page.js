@@ -47,23 +47,17 @@ export default function Login() {
           // Continue with existing redirect logic
           setTimeout(() => {
             if (isAdmin) {
-              router.push('/acess-granted');
-            } else {
-              router.push('/acess-granted');
-            }
-
-            setTimeout(() => {
               router.push('/Navbar');
-            }, 3000);
+            } 
+
+            
           }, 3000);
 
         } catch (error) {
           console.error('Error handling user data:', error);
           setError('An error occurred while processing your request.');
           
-          setTimeout(() => {
-            router.push('/access-denied');
-          }, 1000);
+          
 
           setTimeout(() => {
             router.push('/Navbar');

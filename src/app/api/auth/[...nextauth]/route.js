@@ -23,7 +23,7 @@ export const authOptions = {
           return true; // Allow sign-in
         } else {
           console.log(`Unauthorized email: ${profile.email}`);
-          return "/acess-denied"; // Redirect to access-denied page if unauthorized
+          return false; // Redirect to access-denied page if unauthorized
         }
       }
       return true; // Default to allow sign-in for other providers if added
