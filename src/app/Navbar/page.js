@@ -224,7 +224,7 @@ const Navbar = () => {
         <div className="flex flex-col items-center mb-6 md:mb-8">
           <div className="flex items-center space-x-2 mb-4 md:mb-6">
             <h2 className="text-xl md:text-2xl font-grotesk text-[#00f5d0] font-bold">
-              Countdown
+              COUNTDOWN
             </h2>
             <Clock className="w-5 h-5 md:w-6 md:h-6 text-[#00f5d0]" />
           </div>

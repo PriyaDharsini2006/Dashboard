@@ -197,7 +197,7 @@ const TaskView = () => {
           placeholder="Search Groups, Folders, or Tasks"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full px-4 py-3.5 bg-white/5 backdrop-blur-xl rounded-xl text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#00f5d0] transition-all"
+          className="w-full px-4 py-3.5 bg-white/5 backdrop-blur-xl rounded-xl text-gray-300 placeholder-gray-500 border border-[#00f5d0] focus:outline-none focus:ring-2 focus:ring-[#00f5d0] transition-all"
         />
       </div>
 
