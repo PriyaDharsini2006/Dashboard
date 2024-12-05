@@ -269,13 +269,32 @@ const Navbar = () => {
 
         {/* Reference Section */}
         <div className="mt-6 md:mt-8 p-4 md:p-6 bg-white/5 backdrop-blur-xl rounded-xl">
-          <h3 className="font-grotesk text-[#00f5d0] text-lg md:text-xl mb-2">
+          <h3 className="font-grotesk text-[#00f5d0] text-lg md:text-xl mb-4">
             REFERRALS
           </h3>
-          <p className="text-sm md:text-base text-gray-400">
-            Referrals 1
-            Referrals 2
-          </p>
+          <div className="text-sm md:text-base text-gray-400 space-y-2">
+            {[
+              { name: 'santhoshs', value: 95 },
+              { name: 'roopashrees', value: 93 },
+              { name: 'abishekmanikandan', value: 92 },
+              { name: 'vaibavdk', value: 89 },
+              { name: 'yuvarajkumars', value: 88 },
+              { name: 'darshanav', value: 84 },
+              { name: 'aarthie', value: 83 },
+              { name: 'rishikeshka', value: 81 },
+              { name: 'rishekeshr', value: 78 },
+              { name: 'meenarhoshinic', value: 76 },
+              { name: 'sanjayb', value: 75 }
+            ].map((referral) => (
+              <div 
+                key={referral.name} 
+                className="flex justify-between items-center p-2 hover:bg-white/10 rounded-lg transition-colors"
+              >
+                <span className="text-gray-200">{referral.name}</span>
+                <span className="text-[#00f5d0] font-bold text-lg">{referral.value}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
