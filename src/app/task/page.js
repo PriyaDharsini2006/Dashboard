@@ -171,9 +171,9 @@ const AddItemDialog = ({ title, onSubmit }) => {
             placeholder="Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-2 border rounded"
+            className="w-full text-black px-4 py-2 border rounded"
           />
-          <button type="submit" className="w-full px-4 py-2 bg-[#00f5d0]-500 text-white rounded hover:bg-[#00f5d0]-600">Create</button>
+          <button type="submit" className="w-full px-4 py-2 bg-[#00f5d0] text-white rounded hover:bg-[#00f5d0]-600">Create</button>
         </form>
       </Modal>
     </>
