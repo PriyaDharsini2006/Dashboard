@@ -30,18 +30,3 @@ export async function POST(request) {
 }
 
 // POST new individual task
-export async function POST(request) {
-  const session = await getServerSession(authOptions);
-  const data = await request.json();
-
-  const task = await prisma.individualTask.create({
-    data: {
-      name: data.name,
-      tasks: [data.task],
-      statuses: [-1],  // Default to pending
-      deadlines: [data.deadline]
-    }
-  });
-
-  return Response.json(task);
-}
