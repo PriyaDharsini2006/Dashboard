@@ -315,6 +315,9 @@ import {
   faCheckCircle,
   faUsers,
   faHome,
+  faAreaChart,
+  fa1,
+  faDatabase,
 } from '@fortawesome/free-solid-svg-icons';
 
 const Navbar = () => {
@@ -423,36 +426,48 @@ const Navbar = () => {
   const navLinks = [
     { name: 'External OD', href: '#', icon: faArrowUpRightFromSquare },
     { name: 'Internal OD', href: 'https://internal-od.vercel.app/', icon: faClipboardList },
-    { name: 'Stayback', href: '/stayback', icon: faUsers },
+    { name: 'Stayback', href: 'https://internal-od.vercel.app/stayback/', icon: faHome },
+    { name: 'Meeting', href: 'https://internal-od.vercel.app/meeting/', icon: faUsers },
+
   ];
 
   const nav = [
     { name: 'Tasks & Workspace', href: '/task-view', icon: faListCheck, requiresAuth: true },
     { name: 'PR Mail', href: 'https://hackerz-mail-automation.vercel.app', icon: faCheckCircle },
     { name: 'Treasury', href: 'https://hackerz-treasury.vercel.app', icon: faHome },
+    { name: 'Database', href: '/', icon: faDatabase },
   ];
-
   function calculateTimeLeft() {
     const now = new Date();
-    const targetDate = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
-    const difference = targetDate.getTime() - now.getTime();
-
-    if (difference < 0) {
-      return {
-        days: 0,
-        hours: 0,
-        minutes: 0,
-        seconds: 0
-      };
-    }
-
+    // Hardcode all values to '00'
     return {
-      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-      hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-      minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
-      seconds: Math.floor((difference % (1000 * 60)) / 1000)
+      days: '00',
+      hours: '00',
+      minutes: '00',
+      seconds: '00'
     };
   }
+  // function calculateTimeLeft() {
+  //   const now = new Date();
+  //   const targetDate = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+  //   const difference = targetDate.getTime() - now.getTime();
+
+  //   if (difference < 0) {
+  //     return {
+  //       days: 0,
+  //       hours: 0,
+  //       minutes: 0,
+  //       seconds: 0
+  //     };
+  //   }
+
+  //   return {
+  //     days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+  //     hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+  //     minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+  //     seconds: Math.floor((difference % (1000 * 60)) / 1000)
+  //   };
+  // }
 
   useEffect(() => {
     if (!session) {
@@ -543,6 +558,9 @@ const Navbar = () => {
               </div>
             ))}
           </div>
+          <div className="text-[#00f5d0] text-lg p-2 md:text-2xl font-grotesk font-grotesk animate-pulse">
+              COMING SOON
+            </div>
         </div>
 
         {/* Main Content Area with Navigation and Referrals */}
