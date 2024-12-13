@@ -59,24 +59,3 @@ model Task {
   updatedAt DateTime @updatedAt
 }
 
-
-model IndividualTask {
-  id        String   @id @default(cuid())
-  email     String   // Changed from name to email
-  tasks     String[] 
-  statuses  Int[]    
-  deadlines String[] 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model TeamTask {
-  id        String   @id @default(cuid())
-  teamName  String
-  tasks     String[] 
-  assignees String[] // This will store emails
-  statuses  Int[]    
-  deadlines String[] 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
