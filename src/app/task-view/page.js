@@ -113,9 +113,8 @@ const TaskView = () => {
   }, 300);
 
   const handleRequestOpen = () => {
-    // Check authentication before allowing admin access
     if (!session?.user?.email?.endsWith('@citchennai.net')) {
-      router.push('/access-denied');
+      router.push('/acess-denied');
       return;
     }
     setRequestPageVisible(true);

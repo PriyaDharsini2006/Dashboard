@@ -8,7 +8,6 @@ export async function POST(request , Request) {
   try {
     const { email, name } = await request.json();
 
-    // Check if user is already an admin
     const admin = await prisma.admin.findUnique({
       where: {
         email: email,
@@ -19,7 +18,6 @@ export async function POST(request , Request) {
       return NextResponse.json({ message: 'User is already an admin' }, { status: 400 });
     }
 
-    // Create a new admin request
     await prisma.adminRequest.create({
       data: {
         email,
