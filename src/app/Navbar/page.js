@@ -29,7 +29,6 @@ const Navbar = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
 
-  // Fetch the total traffic count from the API
   useEffect(() => {
     async function checkAdminStatus() {
       if (session?.user?.email) {
@@ -60,6 +59,30 @@ const Navbar = () => {
 
     checkAdminStatus();
   }, [session]);
+
+  useEffect(() => {
+    async function fetchReferrals() {
+      try {
+        const response = await fetch('https://api.hackerzcit.in/v1/dashboard/referral/count?page=1&limit=5');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        if (data.success) {
+          setReferrals(data.data.data);
+        } else {
+          throw new Error(data.message || 'Failed to fetch referrals');
+        }
+      } catch (error) {
+        console.error('Error fetching referrals:', error);
+        setReferralError('Failed to load referrals');
+      }
+    }
+
+    fetchReferrals();
+    const intervalId = setInterval(fetchReferrals, 300000);
+    return () => clearInterval(intervalId);
+  }, []);
 
   useEffect(() => {
     async function fetchTrafficCount() {
@@ -273,34 +296,37 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* Referrals Section - Takes up 1/4 width on large screens */}
           <div className="w-full lg:w-1/4">
             <div className="p-4 md:p-6 bg-white/5 backdrop-blur-xl rounded-xl">
               <h3 className="font-grotesk text-[#00f5d0] text-lg md:text-xl mb-4">
                 REFERRALS
               </h3>
               <div className="text-sm md:text-base text-gray-400 space-y-2">
-                {[
-                  { name: 'santhoshs', value: 95 },
-                  { name: 'roopashrees', value: 93 },
-                  { name: 'abishekmanikandan', value: 92 },
-                  { name: 'vaibavdk', value: 89 },
-                  { name: 'yuvarajkumars', value: 88 },
-                  { name: 'darshanav', value: 84 },
-                  { name: 'aarthie', value: 83 },
-                  { name: 'rishikeshka', value: 81 },
-                  { name: 'rishekeshr', value: 78 },
-                  { name: 'meenarhoshinic', value: 76 },
-                  { name: 'sanjayb', value: 75 }
-                ].map((referral) => (
-                  <div 
-                    key={referral.name} 
-                    className="flex justify-between items-center p-2 hover:bg-white/10 rounded-lg transition-colors"
-                  >
-                    <span className="text-gray-200">{referral.name}</span>
-                    <span className="text-[#00f5d0] font-bold text-lg">{referral.value}</span>
-                  </div>
-                ))}
+                {referralError ? (
+                  <div className="text-red-500 p-2">{referralError}</div>
+                ) : referrals.length === 0 ? (
+                  <div className="text-gray-400 p-2">Loading referrals...</div>
+                ) : (
+                  referrals.map((referral) => (
+                    <div 
+                      key={referral.referral_id}
+                      className="flex justify-between items-center p-2 hover:bg-white/10 rounded-lg transition-colors"
+                    >
+                      <div className="flex flex-col">
+                        <span className="text-gray-200">{referral.name}</span>
+                        <span className="text-gray-400 text-sm">{referral.referral_code}</span>
+                      </div>
+                      <div className="flex flex-col items-end">
+                        <span className="text-[#00f5d0] font-bold text-lg">
+                          {referral.user_count}
+                        </span>
+                        <span className="text-gray-400 text-sm">
+                          {referral.passing_out_year}
+                        </span>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           </div>
