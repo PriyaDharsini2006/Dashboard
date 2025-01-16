@@ -28,6 +28,33 @@ const Navbar = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const router = useRouter();
   const { data: session, status } = useSession();
+  const [referrals, setReferrals] = useState([]);
+  const [referralError, setReferralError] = useState(null);
+
+  useEffect(() => {
+    async function fetchReferrals() {
+      try {
+        const response = await fetch('https://api.hackerzcit.in/v1/dashboard/referral/count?page=1&limit=5');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        if (data.success) {
+          setReferrals(data.data.data);
+        } else {
+          throw new Error(data.message || 'Failed to fetch referrals');
+        }
+      } catch (error) {
+        console.error('Error fetching referrals:', error);
+        setReferralError('Failed to load referrals');
+      }
+    }
+
+    fetchReferrals();
+    const intervalId = setInterval(fetchReferrals, 300000);
+    return () => clearInterval(intervalId);
+  }, []);
+
 
   useEffect(() => {
     async function checkAdminStatus() {
@@ -59,30 +86,6 @@ const Navbar = () => {
 
     checkAdminStatus();
   }, [session]);
-
-  useEffect(() => {
-    async function fetchReferrals() {
-      try {
-        const response = await fetch('https://api.hackerzcit.in/v1/dashboard/referral/count?page=1&limit=5');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        if (data.success) {
-          setReferrals(data.data.data);
-        } else {
-          throw new Error(data.message || 'Failed to fetch referrals');
-        }
-      } catch (error) {
-        console.error('Error fetching referrals:', error);
-        setReferralError('Failed to load referrals');
-      }
-    }
-
-    fetchReferrals();
-    const intervalId = setInterval(fetchReferrals, 300000);
-    return () => clearInterval(intervalId);
-  }, []);
 
   useEffect(() => {
     async function fetchTrafficCount() {
@@ -296,6 +299,7 @@ const Navbar = () => {
             </div>
           </div>
 
+          {/* Referrals Section - Takes up 1/4 width on large screens */}
           <div className="w-full lg:w-1/4">
             <div className="p-4 md:p-6 bg-white/5 backdrop-blur-xl rounded-xl">
               <h3 className="font-grotesk text-[#00f5d0] text-lg md:text-xl mb-4">
