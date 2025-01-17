@@ -284,6 +284,7 @@ const Navbar = () => {
                   onClick={() => handleNavigation(link)}
                   className="p-6 bg-white/5 backdrop-blur-xl hover:bg-white/10 rounded-xl transition-all duration-200 group flex items-center justify-between hover:transform hover:scale-[1.02] h-40" // Increased height
                 >
+                  
                   <div className="flex items-center">
                     <FontAwesomeIcon 
                       icon={link.icon} 
