@@ -161,7 +161,7 @@ const Navbar = () => {
   ];
   function calculateTimeLeft() {
     const now = new Date();
-    const targetDate = new Date('2025-02-03T23:59:59'); // Updated to February 3rd, 2025
+    const targetDate = new Date('2026-02-09T23:59:59');
     const difference = targetDate.getTime() - now.getTime();
 
     if (difference < 0) {
