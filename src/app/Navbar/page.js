@@ -11,8 +11,7 @@ import {
   faCheckCircle,
   faUsers,
   faHome,
-  faAreaChart,
-  fa1,
+  faSheetPlastic,
   faDatabase,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -146,18 +145,17 @@ const Navbar = () => {
   };
 
   const navLinks = [
-    { name: 'External OD', href: '#', icon: faArrowUpRightFromSquare },
     { name: 'Internal OD', href: 'https://internal-od.vercel.app/', icon: faClipboardList },
     { name: 'Stayback', href: 'https://internal-od.vercel.app/stayback/', icon: faHome },
     { name: 'Meeting', href: 'https://internal-od.vercel.app/meeting/', icon: faUsers },
-
+    { name: 'Tasks & Workspace', href: '/task-view', icon: faListCheck, requiresAuth: true },
   ];
 
   const nav = [
-    { name: 'Tasks & Workspace', href: '/task-view', icon: faListCheck, requiresAuth: true },
+    { name: 'Hackerz Forms', href: 'https://forms.hackerzcit.in/', icon: faSheetPlastic },
     { name: 'PR Mail', href: 'https://hackerz-mail-automation.vercel.app', icon: faCheckCircle },
     { name: 'Treasury', href: 'https://hackerz-treasury.vercel.app', icon: faHome },
-    { name: 'Database', href: '/', icon: faDatabase },
+    { name: 'External OD', href: '/', icon: faClipboardList },
   ];
   function calculateTimeLeft() {
     const now = new Date();
